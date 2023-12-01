@@ -8,7 +8,6 @@ import catalogProducts from '@/utils/data/catalog';
 import { LoginModal } from '@/pages/home/login-modal';
 import { RegisterModal } from '@/pages/home/register-modal';
 import { ViewProduct } from '@/pages/home/view-product-details';
-// import { AddFormContactModal } from '@/components/features/AddFormContactModal';
 
 
 
@@ -17,7 +16,6 @@ export const HomePage = () => {
     const [openRegisterModal, setopenRegisterModal] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [isItemSelected, setIsSelectedItem] = useState(false);
-    // const [contactsModal, setContactsModal] = useState([]);
     
 
     const handleCloseLoginModal = () => setOpenLoginModal(false);
@@ -92,7 +90,6 @@ export const HomePage = () => {
                 isOpen={openRegisterModal}
                 closeModal={handleCloseRegisterModal}
             >
-                {/* <AddFormContactModal/> */}
             </RegisterModal>
             {isItemSelected && (
                 <ViewProduct
