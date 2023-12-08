@@ -10,6 +10,6 @@ We used different technologies for this project:
 - Tailwindcss
 
 Team members
-Omowunmi
-Temitope
-Tokunbo
+Omowunmi<>
+Temitope<>
+Tokunbo<>
