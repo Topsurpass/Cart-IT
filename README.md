@@ -8,3 +8,8 @@ We used different technologies for this project:
 ## Frontend
 - Reactjs
 - Tailwindcss
+
+Team members
+Omowunmi<>
+Temitope<>
+Tokunbo<>
