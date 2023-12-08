@@ -28,7 +28,7 @@ export const HomePage = () => {
     };
 
     return (
-        <main className='px-5'>
+        <main className="px-5">
             <Nav
                 handleLogin={() => setOpenLoginModal(true)}
                 handleRegister={() => setopenRegisterModal(true)}
@@ -42,7 +42,7 @@ export const HomePage = () => {
                             idx < catalogProducts.length - 4;
                         return (
                             // eslint-disable-next-line react/jsx-no-useless-fragment
-       
+
                             <div
                                 key={item.id}
                                 onClick={() => handleSelectItem(item)}
@@ -72,11 +72,8 @@ export const HomePage = () => {
                                 <div className="w-full">
                                     {item.productTitle}
                                 </div>
-                                <p className="font-bold ">
-                                    {item.price}
-                                </p>
+                                <p className="font-bold ">{item.price}</p>
                             </div>
-
                         );
                     })}
                 </div>
@@ -89,8 +86,8 @@ export const HomePage = () => {
             <RegisterModal
                 isOpen={openRegisterModal}
                 closeModal={handleCloseRegisterModal}
-            >
-            </RegisterModal>
+                nowLogin={()=>setOpenLoginModal(true)}
+            ></RegisterModal>
             {isItemSelected && (
                 <ViewProduct
                     isOpen={isItemSelected}
