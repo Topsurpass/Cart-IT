@@ -6,18 +6,16 @@ const Sale = () => {
         <div className="mt-10 border-b-2 pb-0 md:flex md:justify-between md:pb-10">
             <div className="w-full md:w-[40%]">
                 <h2 className="mb-0 text-xl font-bold md:mb-2 md:text-2xl">
-                    About the eCommerce Website
+                    About CartIt
                 </h2>
-                <h2 className="mb-0 text-lg font-semibold text-slate-400 md:mb-2 md:text-2xl">
-                    Groceries
-                </h2>
+
                 <p className="text-sm md:text-lg">
-                    eCommerce is your number one online shopping site in
-                    Nigeria. We are an online store where you can purchase all
-                    your electronics, as well as books, home appliances, kiddies
-                    items, fashion items for men, women, and children; cool
-                    gadgets, computers, groceries, automobile parts, and more on
-                    the go.
+                    CartIt is an online ecommerce store management system where
+                    sellers get to manage their products that will eventually be
+                    listed and displayed for their buyers. With CartIt, you as
+                    the seller can perform tasks such as creating new category of products,
+                    create and list new products, display all your products and their category,
+                    delete and update a product e.t.c.
                 </p>
             </div>
             <div className="mt-10 w-full md:mt-0 md:w-[55%] lg:w-[48%]">

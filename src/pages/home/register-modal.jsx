@@ -1,14 +1,12 @@
-import React from 'react';
 import MyModal from '@/components/ui/Modal';
 import { ButtonModal } from '@/components/ui/ButtonModal';
 import { FormInput } from '@/components/features/FormInput';
 import { useForm } from 'react-hook-form';
-import { X } from 'lucide-react';
+import { HeaderModal } from '@/components/ui/HeaderModal';
 import { AddFormContactModal } from '@/components/features/AddFormContactModal';
+import { LoginModal } from './login-modal';
 
-
-export const RegisterModal = ({ isOpen, closeModal }) => {
-
+export const RegisterModal = ({ isOpen, closeModal, nowLogin}) => {
 
     const {
         register,
@@ -21,23 +19,18 @@ export const RegisterModal = ({ isOpen, closeModal }) => {
         alert('Registered');
         reset();
         closeModal();
+        nowLogin();
+
     };
 
     return (
         <>
             <MyModal isOpen={isOpen} closeModal={closeModal} title="">
                 <div className="flex w-full flex-col justify-center">
-                    <div className="flex justify-center  border-b-2">
-                        <div className="mb-5 flex w-full flex-col justify-center">
-                            <h1 className="w-full text-center text-2xl font-bold">
-                                eTranzact eCommerce
-                            </h1>
-                            <p className="w-full text-center text-sm text-slate-500">
-                                Create an account to list your own products
-                            </p>
-                        </div>
-                        <X className="cursor-pointer" onClick={closeModal} />
-                    </div>
+                    <HeaderModal
+                        closeModal={closeModal}
+                        title="Create an account to list your own Products"
+                    />
                     <form onSubmit={handleSubmit(submitForm)} className="mt-3">
                         <FormInput
                             labelName="Full Name"
