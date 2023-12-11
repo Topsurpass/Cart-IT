@@ -27,35 +27,36 @@ export const LoginModal = ({ isOpen, closeModal }) => {
                 />
             </div>
 
-            <form onSubmit={handleSubmit(submitForm)} className="mt-3">
-                <FormInput
-                    labelName="Email Address"
-                    type="email"
-                    validation={register('email', {
-                        required: true,
-                    })}
-                    errMessaage="Invalid email address"
-                    error={errors.email}
-                />
-                <FormInput
-                    labelName="Password"
-                    type="password"
-                    validation={register('password', {
-                        required: true,
-                    })}
-                    errMessaage="Enter your password"
-                    error={errors.password}
-                />
-                <div className="mt-4">
-                    <ButtonModal title="Login" />
-                </div>
-            </form>
-            <p className="mt-3 text-center text-sm">
-                Don't have an account ?{' '}
-                <a href="#" className="text-bold text-blue-500">
-                    Sign Up
-                </a>
-            </p>
-        </MyModal>
+                <form onSubmit={handleSubmit(submitForm)} className="mt-3">
+                    <FormInput
+                        labelName="Email Address"
+                        type="email"
+                        validation={register('email', {
+                            required: true,
+                        })}
+                        errMessaage="Invalid email address"
+                        error={errors.email}
+                    />
+                    <FormInput
+                        labelName="Password"
+                        type="password"
+                        validation={register('password', {
+                            required: true,
+                        })}
+                        errMessaage="Enter your password"
+                        error={errors.password}
+                    />
+                    <div className="mt-4">
+                        <ButtonModal title="Login" />
+                    </div>
+                </form>
+                <p className="mt-3 text-center text-sm">
+                    Don't have an account ?{' '}
+                    <a href="#" className="text-bold text-blue-500">
+                        Sign Up
+                    </a>
+                </p>
+            </MyModal>
+        </>
     );
 };

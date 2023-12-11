@@ -11,7 +11,7 @@ export const FormInput = ({
     const inputProps = {
         type: type || 'text',
         ...validation,
-        className: 'h-10 rounded border-2 pl-1',
+        className: 'h-10 rounded border pl-1',
     };
 
     return (
@@ -19,8 +19,13 @@ export const FormInput = ({
             <label className="font-bold">
                 {labelName} <span className="text-red-500">{icon}</span>
             </label>
+<<<<<<< HEAD
             <input {...inputProps} />
             {error && <span className="text-red-500">{errMessaage}</span>}
+=======
+            <input {...inputProps}></input>
+            {error && <span className="text-red-500 text-xs">{errMessaage}</span>}
+>>>>>>> 98e8bcc39fe47982966df9da73cd53f51f5a832a
         </div>
     );
 };
