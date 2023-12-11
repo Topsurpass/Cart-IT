@@ -42,9 +42,9 @@ export const LoginModal = ({ isOpen, closeModal }) => {
                         labelName="Password"
                         type="password"
                         validation={register('password', {
-                            required: true,
+                            required: true, minLength: 8,
                         })}
-                        errMessaage="Enter your password"
+                        errMessaage="Password should be minimum of 8 characters"
                         error={errors.password}
                     />
                     <div className="mt-4">
