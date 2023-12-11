@@ -3,11 +3,8 @@ import { ButtonModal } from '@/components/ui/ButtonModal';
 import { FormInput } from '@/components/features/FormInput';
 import { useForm } from 'react-hook-form';
 import { HeaderModal } from '@/components/ui/HeaderModal';
-import { AddFormContactModal } from '@/components/features/AddFormContactModal';
-import { LoginModal } from './login-modal';
 
-export const RegisterModal = ({ isOpen, closeModal, nowLogin}) => {
-
+export const RegisterModal = ({ isOpen, closeModal, nowLogin }) => {
     const {
         register,
         handleSubmit,
@@ -20,7 +17,6 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin}) => {
         reset();
         closeModal();
         nowLogin();
-
     };
 
     return (
@@ -37,8 +33,12 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin}) => {
                             icon="*"
                             validation={register('fullname', {
                                 required: true,
+                                pattern: {
+                                    value: /^[A-Za-z\s]{6,}$/i,
+                                },
+                                maxLength: 30
                             })}
-                            errMessaage="Full name is required"
+                            errMessaage="Minimum of 6 and max of 30 letters"
                             error={errors.fullname}
                         />
                         <FormInput
@@ -57,8 +57,12 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin}) => {
                                 icon="*"
                                 validation={register('username', {
                                     required: true,
+                                    pattern: {
+                                        value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/,
+                                    },
+                                    maxLength: 15
                                 })}
-                                errMessaage="Enter your username"
+                                errMessaage="Max length of 15 with 1 digit no special character"
                                 error={errors.username}
                             />
                             <div className="flex flex-col gap-5">
@@ -89,7 +93,7 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin}) => {
                                     Female
                                 </div>
                                 {errors.gender && (
-                                    <span className="-mt-5 text-red-500">
+                                    <span className="-mt-5 text-xs text-red-500">
                                         Select a gender
                                     </span>
                                 )}
@@ -102,14 +106,38 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin}) => {
                             icon="*"
                             validation={register('password', {
                                 required: true,
+                                pattern:
+                                    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
                             })}
-                            errMessaage="Enter your password"
+                            errMessaage="Minimum of 8 characters (1 digit, 1 special character, 1 uppercase and lowercase)"
                             error={errors.password}
                         />
-                        <p className="mb-1 font-bold">Contact Info</p>
-                        <div className=" flex flex-col items-center justify-center gap-3 rounded border-2 p-5">
-                            <AddFormContactModal />
-                        </div>
+
+                        <FormInput
+                            labelName="Phone"
+                            icon="*"
+                            validation={register('phone', {
+                                required: true,
+                                pattern: {
+                                    value: /^\d{11}$/,
+                                },
+                            })}
+                            errMessaage="Must be 11 digits"
+                            error={errors.phone}
+                        />
+
+                        <FormInput
+                            labelName="Address"
+                            icon="*"
+                            validation={register('address', {
+                                required: true,
+                                pattern: {
+                                    value: /^[A-Za-z0-9\s\.,#-]{10,}$/,
+                                },
+                            })}
+                            errMessaage="Minimum of 10 characters"
+                            error={errors.address}
+                        />
 
                         <div className="mt-4">
                             <ButtonModal title="Create Account" />
