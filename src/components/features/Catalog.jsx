@@ -1,8 +1,5 @@
 import React from 'react';
-import { ArrowDownUp } from 'lucide-react';
-import { ChevronDown } from 'lucide-react';
-
-
+import { ArrowDownUp, ChevronDown } from 'lucide-react';
 
 const Catalog = ({ catalogName, children }) => {
     return (

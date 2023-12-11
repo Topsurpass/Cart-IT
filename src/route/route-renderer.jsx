@@ -1,6 +1,5 @@
-import routeConfig from "@/route/route-config";
-import { useRoutes } from "react-router-dom";
-
+import { useRoutes } from 'react-router-dom';
+import routeConfig from '@/route/route-config';
 
 export const RouteRenderer = () => {
     const route = useRoutes(routeConfig);

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import MobileNav from '@/components/ui/MobileNav';
 import Nav from '@/components/features/Nav';
 import Hero from '@/components/features/Hero';
 import Sale from '@/components/features/Sale';
@@ -9,14 +10,11 @@ import { LoginModal } from '@/pages/home/login-modal';
 import { RegisterModal } from '@/pages/home/register-modal';
 import { ViewProduct } from '@/pages/home/view-product-details';
 
-
-
 export const HomePage = () => {
     const [openLoginModal, setOpenLoginModal] = useState(false);
     const [openRegisterModal, setopenRegisterModal] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [isItemSelected, setIsSelectedItem] = useState(false);
-    
 
     const handleCloseLoginModal = () => setOpenLoginModal(false);
     const handleCloseRegisterModal = () => setopenRegisterModal(false);
@@ -29,6 +27,10 @@ export const HomePage = () => {
 
     return (
         <main className="px-5">
+            <MobileNav
+                handleLogin={() => setOpenLoginModal(true)}
+                handleRegister={() => setopenRegisterModal(true)}
+            />
             <Nav
                 handleLogin={() => setOpenLoginModal(true)}
                 handleRegister={() => setopenRegisterModal(true)}
@@ -41,8 +43,6 @@ export const HomePage = () => {
                         const addMarginBottom =
                             idx < catalogProducts.length - 4;
                         return (
-                            // eslint-disable-next-line react/jsx-no-useless-fragment
-
                             <div
                                 key={item.id}
                                 onClick={() => handleSelectItem(item)}
@@ -86,8 +86,8 @@ export const HomePage = () => {
             <RegisterModal
                 isOpen={openRegisterModal}
                 closeModal={handleCloseRegisterModal}
-                nowLogin={()=>setOpenLoginModal(true)}
-            ></RegisterModal>
+                nowLogin={() => setOpenLoginModal(true)}
+            />
             {isItemSelected && (
                 <ViewProduct
                     isOpen={isItemSelected}

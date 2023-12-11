@@ -19,7 +19,7 @@ export const FormInput = ({
             <label className="font-bold">
                 {labelName} <span className="text-red-500">{icon}</span>
             </label>
-            <input {...inputProps}></input>
+            <input {...inputProps} />
             {error && <span className="text-red-500">{errMessaage}</span>}
         </div>
     );
