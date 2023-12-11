@@ -9,7 +9,3 @@ We used different technologies for this project:
 - Reactjs
 - Tailwindcss
 
-Team members
-Omowunmi<>
-Temitope<>
-Tokunbo<>
