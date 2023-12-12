@@ -17,8 +17,15 @@ def registerMerchant():
         return jsonify(message='Missing required fields'), 400
     
     merchant_id = AUTH.register_merchant(merchant, email, username, password, phone, address)
-
-    if merchant_id:
+    if merchant_id == 1:
+        return jsonify(message='Merchant name already exists'), 401
+    if merchant_id == 2:
+        return jsonify(message='Email already exists'), 401
+    if merchant_id == 3:
+        jsonify(message='Username already exists'), 401
+    if merchant_id == 4:
+        return jsonify(message='Phone Number already exists'), 401
+    if merchant_id == 0:
         return jsonify(message='Account successfully created'), 201
     
 

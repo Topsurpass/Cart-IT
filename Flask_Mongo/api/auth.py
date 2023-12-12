@@ -34,15 +34,15 @@ class Auth:
         existing_phone = self._db.find_merchant({'phone': phone})
 
         if existing_merchant:
-            return jsonify(message='Merchant name already exists'), 401
+            return 1
         if existing_email:
-            return jsonify(message='Email already exists'), 401
+            return 2
         if existing_username:
-            return jsonify(message='Username already exists'), 401
+            return 3
         if existing_phone:
-            return jsonify(message='Phone Number already exists'), 401
+            return 4
         
-        merchant_id = self._db.insert_merchant({
+        self._db.insert_merchant({
             'merchant': merchant,
             'email': email,
             'username': username,
@@ -50,9 +50,9 @@ class Auth:
             'phone': phone,
             'address': address,
             'date': datetime.datetime.now(tz=datetime.timezone.utc),
-        }).inserted_id
+        })
 
-        return merchant_id
+        return 0
     
     def valid_login(self, email: str, password: str)-> bool:
         """Validate merchant before siginiing in"""
