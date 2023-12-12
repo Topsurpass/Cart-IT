@@ -57,6 +57,5 @@ export const LoginModal = ({ isOpen, closeModal }) => {
                     </a>
                 </p>
             </MyModal>
-        </>
     );
 };
