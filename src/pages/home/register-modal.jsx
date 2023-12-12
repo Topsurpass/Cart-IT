@@ -29,14 +29,14 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin }) => {
                     />
                     <form onSubmit={handleSubmit(submitForm)} className="mt-3">
                         <FormInput
-                            labelName="Full Name"
+                            labelName="Merchant"
                             icon="*"
-                            validation={register('fullname', {
+                            validation={register('merchant', {
                                 required: true,
                                 pattern: {
                                     value: /^[A-Za-z\s]{6,}$/i,
                                 },
-                                maxLength: 30
+                                maxLength: 30,
                             })}
                             errMessaage="Minimum of 6 and max of 30 letters"
                             error={errors.fullname}
@@ -51,54 +51,20 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin }) => {
                             errMessaage="Email is required"
                             error={errors.email}
                         />
-                        <div className="flex gap-3">
-                            <FormInput
-                                labelName="Username"
-                                icon="*"
-                                validation={register('username', {
-                                    required: true,
-                                    pattern: {
-                                        value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/,
-                                    },
-                                    maxLength: 15
-                                })}
-                                errMessaage="Max length of 15 with 1 digit no special character"
-                                error={errors.username}
-                            />
-                            <div className="flex flex-col gap-5">
-                                <label className="font-bold">
-                                    Gender
-                                    <span className="text-red-500"> *</span>
-                                </label>
-                                <div className="font-semibold">
-                                    <input
-                                        type="radio"
-                                        name="gender"
-                                        value="Male"
-                                        className="mr-1"
-                                        {...register('gender', {
-                                            required: true,
-                                        })}
-                                    />
-                                    Male
-                                    <input
-                                        type="radio"
-                                        name="gender"
-                                        value="Female"
-                                        className="ml-5 mr-1"
-                                        {...register('gender', {
-                                            required: true,
-                                        })}
-                                    ></input>
-                                    Female
-                                </div>
-                                {errors.gender && (
-                                    <span className="-mt-5 text-xs text-red-500">
-                                        Select a gender
-                                    </span>
-                                )}
-                            </div>
-                        </div>
+
+                        <FormInput
+                            labelName="Username"
+                            icon="*"
+                            validation={register('username', {
+                                required: true,
+                                pattern: {
+                                    value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/,
+                                },
+                                maxLength: 15,
+                            })}
+                            errMessaage="Max length of 15 with 1 digit no special character"
+                            error={errors.username}
+                        />
 
                         <FormInput
                             type="password"

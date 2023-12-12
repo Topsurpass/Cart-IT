@@ -16,18 +16,24 @@ class DB:
         self.db = self.client[db]
         self.collection = self.db[collection]
 
-    def insert_data(self, data: Dict[str, Any]) -> Any:
+    def insert_merchant(self, data: Dict[str, Any]) -> Any:
         """Insert new data into the db and return its ID"""
-        data_id = self.collection.insert_one(data).inserted_id
-        return data_id
+        merchant_id = self.collection.insert_one(data).inserted_id
+        return merchant_id
     
-    def find_single_data(self, query: Dict[str, Any]) -> Union[List[Dict[str, Any]], None]:
+    def find_merchant(self, query: Dict[str, Any]) -> Union[List[Dict[str, Any]], None]:
         """Find a single data in the database that match the query"""
-        return self.collection.find_one(query)
+        merchant_id = self.collection.find_one(query)
+        return merchant_id
     
-    def find_all_data(self):
+    def find_all_merchant(self) -> List[Dict[str, Any]]:
         """Find all documents in a collection"""
-        return self.collection.find()
+        return list(self.collection.find())
+    
+    def update_merchant(self, query: Dict[str, Any], update_data: Dict[str, Any]) -> bool:
+        """Update a document in the collection based document id"""
+        result = self.collection.update_one(query, {'$set': update_data})
+        return result
 
     def close_connection(self) -> None:
         """Close the MongoDB connection"""

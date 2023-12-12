@@ -1,4 +1,4 @@
-from api.v1.views import app_views
+from api.v1.main import app_views
 from api.v1.auth import app_auth
 from flask import Flask, jsonify
 import os
