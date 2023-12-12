@@ -1,6 +1,6 @@
 import React from 'react';
-import MyModal from '@/components/ui/Modal';
 import { useForm } from 'react-hook-form';
+import MyModal from '@/components/ui/Modal';
 import { FormInput } from '@/components/features/FormInput';
 import { ButtonModal } from '@/components/ui/ButtonModal';
 import { HeaderModal } from '@/components/ui/HeaderModal';
@@ -19,14 +19,13 @@ export const LoginModal = ({ isOpen, closeModal }) => {
         closeModal();
     };
     return (
-        <>
-            <MyModal isOpen={isOpen} closeModal={closeModal} title="">
-                <div className="flex w-full justify-center">
-                    <HeaderModal
-                        closeModal={closeModal}
-                        title="Login to manage your products"
-                    />
-                </div>
+        <MyModal isOpen={isOpen} closeModal={closeModal} title="">
+            <div className="flex w-full justify-center">
+                <HeaderModal
+                    closeModal={closeModal}
+                    title="Login to manage your products"
+                />
+            </div>
 
                 <form onSubmit={handleSubmit(submitForm)} className="mt-3">
                     <FormInput
@@ -42,9 +41,9 @@ export const LoginModal = ({ isOpen, closeModal }) => {
                         labelName="Password"
                         type="password"
                         validation={register('password', {
-                            required: true, minLength: 8,
+                            required: true,
                         })}
-                        errMessaage="Password should be minimum of 8 characters"
+                        errMessaage="Enter your password"
                         error={errors.password}
                     />
                     <div className="mt-4">
@@ -58,6 +57,5 @@ export const LoginModal = ({ isOpen, closeModal }) => {
                     </a>
                 </p>
             </MyModal>
-        </>
     );
 };

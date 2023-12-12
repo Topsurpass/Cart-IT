@@ -1,6 +1,6 @@
 import React from 'react';
-import logo from '@/assets/icons/cartit.png';
 import { X } from 'lucide-react';
+import logo from '@/assets/icons/cartit.png';
 
 export const HeaderModal = ({ closeModal, title }) => {
     return (

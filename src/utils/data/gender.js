@@ -6,7 +6,7 @@ const gender = [
     {
         id: 2,
         name: 'female',
-    }
-]
+    },
+];
 
 export default gender;

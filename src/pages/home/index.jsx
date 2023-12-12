@@ -76,8 +76,6 @@ export const HomePage = () => {
                         const addMarginBottom =
                             idx < catalogProducts.length - 4;
                         return (
-                            // eslint-disable-next-line react/jsx-no-useless-fragment
-
                             <div
                                 key={item.id}
                                 onClick={() => handleSelectItem(item)}
