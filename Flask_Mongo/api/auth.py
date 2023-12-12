@@ -89,7 +89,7 @@ class Auth:
         """Destroy session ID of a merchant when a merchant logout"""
         if not merchant_id:
             return None
-        self._db. update_merchant({'session_id': merchant_id}, {'session_id': None})
+        self._db. update_merchant({'_id': merchant_id}, {'session_id': None})
         
 
         
