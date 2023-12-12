@@ -22,7 +22,7 @@ def registerMerchant():
     if merchant_id == 2:
         return jsonify(message='Email already exists'), 401
     if merchant_id == 3:
-        jsonify(message='Username already exists'), 401
+        return jsonify(message='Username already exists'), 401
     if merchant_id == 4:
         return jsonify(message='Phone Number already exists'), 401
     if merchant_id == 0:
