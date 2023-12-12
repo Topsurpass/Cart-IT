@@ -3,4 +3,4 @@ from flask import jsonify
 
 @app_views.route('/testpage')
 def testpage():
-    return jsonify(message='all good!')
+    return jsonify(message='Welcome to home page, all good!')

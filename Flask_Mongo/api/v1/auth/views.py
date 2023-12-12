@@ -1,5 +1,7 @@
+"""This module contains routes that requires authentication"""
+
 from api.v1.auth import app_auth
-from flask import request,  jsonify
+from flask import request,  jsonify, abort, redirect
 from api import AUTH
 
 
@@ -31,7 +33,7 @@ def registerMerchant():
 
 @app_auth.route("/login", methods=['POST'], strict_slashes=False)
 def loginMerchant():
-    """Login merchant and create token"""
+    """Login merchant, create token and redirect to /profile"""
     email = request.form.get('email')
     password = request.form.get('password')
 
@@ -45,3 +47,23 @@ def loginMerchant():
     response.set_cookie("session_id", session_id)
     return response
 
+@app_auth.route("/logout", methods=['DELETE'], strict_slashes=False)
+def logoutMerchant():
+    """Logout merchant and delete cookie set and redirect to /homepage"""
+
+    session_id = request.cookies.get("session_id")
+    merchant = AUTH.get_user_from_session_id(session_id)
+    if not merchant:
+        abort(403)
+    AUTH.destroy_session(merchant['_id'])
+    return redirect('/testpage')
+
+
+@app_auth.route("/profile", methods=['GET'], strict_slashes=False)
+def merchantProfile():
+    """Login merchant without login details. This relies on cookies set"""
+    session_id = request.cookies.get("session_id")
+    merchant = AUTH.get_user_from_session_id(session_id)
+    if merchant:
+        return jsonify({'email': merchant['email']})
+    abort(403)

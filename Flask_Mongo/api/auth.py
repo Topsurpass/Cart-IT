@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import bcrypt
 from api.db  import DB
 from typing import Any
@@ -72,6 +73,24 @@ class Auth:
             return session_id
         else:
             return None
+        
+    def get_user_from_session_id(self, session_id: str):
+        """Get a registered merchant using the session id, no need
+        to input login details"""
+        if not session_id:
+            return None
+        merchant = self._db.find_merchant({'session_id': session_id})
+        if merchant:
+            return merchant
+        else:
+            return None
+        
+    def destroy_session(self, merchant_id) -> None:
+        """Destroy session ID of a merchant when a merchant logout"""
+        if not merchant_id:
+            return None
+        self._db. update_merchant({'session_id': merchant_id}, {'session_id': None})
+        
 
         
         
