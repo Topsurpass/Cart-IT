@@ -13,9 +13,10 @@ const Sale = () => {
                     CartIt is an online ecommerce store management system where
                     sellers get to manage their products that will eventually be
                     listed and displayed for their buyers. With CartIt, you as
-                    the seller can perform tasks such as creating new category of products,
-                    create and list new products, display all your products and their category,
-                    delete and update a product e.t.c.
+                    the seller can perform tasks such as creating new category
+                    of products, create and list new products, display all your
+                    products and their category, delete and update a product
+                    e.t.c.
                 </p>
             </div>
             <div className="mt-10 w-full md:mt-0 md:w-[55%] lg:w-[48%]">

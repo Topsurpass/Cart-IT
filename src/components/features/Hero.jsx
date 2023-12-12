@@ -3,7 +3,7 @@ import banner from '@/assets/images/christmas-sale-banner.png';
 
 const Hero = () => {
     return (
-        <div className='mt-24'>
+        <div className="mt-24">
             <img src={banner} alt="sale banner" className="-mb-7 w-full" />
             <button
                 type="button"

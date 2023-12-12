@@ -6,7 +6,7 @@ export default {
             fontFamily: {
                 playfair: ['Playfair Display', 'serif'],
                 roboto: ['Roboto', 'sans-serif'],
-                bree: ['Bree Serif', 'serif', 'Roboto', 'sans-serif']
+                bree: ['Bree Serif', 'serif', 'Roboto', 'sans-serif'],
             },
         },
     },
