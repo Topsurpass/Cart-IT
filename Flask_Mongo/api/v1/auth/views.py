@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """This module contains routes that requires authentication"""
 
 from api.v1.auth import app_auth
@@ -61,9 +62,10 @@ def logoutMerchant():
 
 @app_auth.route("/profile", methods=['GET'], strict_slashes=False)
 def merchantProfile():
-    """Login merchant without login details. This relies on cookies set"""
+    """Login merchant without login details. This relies on cookies set when login"""
     session_id = request.cookies.get("session_id")
     merchant = AUTH.get_user_from_session_id(session_id)
     if merchant:
         return jsonify({'email': merchant['email']})
     abort(403)
+    

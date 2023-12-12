@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
+"""This module contains Auth class for authenticating routes, hasing password and creating
+session ids"""
 import bcrypt
 from api.db  import DB
 from typing import Any
 from uuid import uuid4
-from flask import jsonify
 import datetime
 
 def _hash_password(password: str) -> bytes:
@@ -90,11 +91,3 @@ class Auth:
         if not merchant_id:
             return None
         self._db. update_merchant({'_id': merchant_id}, {'session_id': None})
-        
-
-        
-        
-
-  
-
-
