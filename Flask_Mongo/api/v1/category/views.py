@@ -38,8 +38,8 @@ def list_all_category():
     if not merchant:
         abort(403)
     projection = {
-        'name': 1,
-        'description': 1
+        '_id': 0,
+        'merchant_id': 0
     }
     category = CATEGORY_db.find_all_merchant({'merchant_id': merchant['_id']}, projection)
     return jsonify(category), 200
