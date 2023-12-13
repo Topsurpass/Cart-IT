@@ -3,6 +3,7 @@
 from bson import json_util
 from pymongo import MongoClient
 from typing import Dict, Any, List, Union
+import json
 import os
 
 host = os.getenv("API_HOST", "localhost")
@@ -32,7 +33,7 @@ class DB:
         returning some attributes of each"""
         documents = list(self.collection.find(query, projection))
         json_documents = json_util.dumps(documents)
-        return json_documents
+        return json.loads(json_documents)
 
     
     def update_merchant(self, query: Dict[str, Any], update_data: Dict[str, Any]) -> bool:
