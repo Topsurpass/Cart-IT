@@ -38,8 +38,6 @@ def list_all_category():
     if not merchant:
         abort(403)
     projection = {
-        '_id': 0,
-        'merchant_id': 0,
         'name': 1,
         'description': 1
     }
