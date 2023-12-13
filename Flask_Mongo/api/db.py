@@ -1,5 +1,6 @@
 """This module contains our MongoDB database for storing data from clients"""
 
+from bson import json_util
 from pymongo import MongoClient
 from typing import Dict, Any, List, Union
 import os
@@ -29,7 +30,9 @@ class DB:
     def find_all_merchant(self, query: Any, projection: Any) -> List[Dict[str, Any]]:
         """Find all documents in a collection with a specific merchant_id,
         returning some attributes of each"""
-        return list(self.collection.find(query, projection))
+        documents = list(self.collection.find(query, projection))
+        json_documents = json_util.dumps(documents)
+        return json_documents
 
     
     def update_merchant(self, query: Dict[str, Any], update_data: Dict[str, Any]) -> bool:
