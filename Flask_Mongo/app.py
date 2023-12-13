@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """This contains my app configuration and handles errors"""
 
-from api.v1.main import app_views
+from api.v1.category import app_category
+from api.v1.product import app_product
 from api.v1.auth import app_auth
 from flask import Flask, jsonify
 import os
 
 app = Flask(__name__)
-app.register_blueprint(app_views)
+app.register_blueprint(app_category)
+app.register_blueprint(app_product)
 app.register_blueprint(app_auth)
 
 

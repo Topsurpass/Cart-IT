@@ -26,9 +26,11 @@ class DB:
         merchant_id = self.collection.find_one(query)
         return merchant_id
     
-    def find_all_merchant(self) -> List[Dict[str, Any]]:
-        """Find all documents in a collection"""
-        return list(self.collection.find())
+    def find_all_merchant(self, query: Any, projection: Any) -> List[Dict[str, Any]]:
+        """Find all documents in a collection with a specific merchant_id,
+        returning some attributes of each"""
+        return list(self.collection.find(query, projection))
+
     
     def update_merchant(self, query: Dict[str, Any], update_data: Dict[str, Any]) -> bool:
         """Update a document in the collection based document id"""
