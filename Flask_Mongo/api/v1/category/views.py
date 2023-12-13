@@ -7,7 +7,7 @@ from api import AUTH
 from api import CATEGORY_db
 
 
-@app_category.route('/category', methods=['POST'], strict_slashes=False)
+@app_category.route('/new', methods=['POST'], strict_slashes=False)
 def add_category():
     """Create new category of product"""
     name = request.form.get('name')
@@ -28,7 +28,7 @@ def add_category():
     })
     return jsonify(message='New category added'),201
 
-@app_category.route('/category', methods=['GET'], strict_slashes=False)
+@app_category.route('/all', methods=['GET'], strict_slashes=False)
 def list_all_category():
     """List all the categories created by a user"""
     session_id = request.cookies.get('session_id')

@@ -32,6 +32,7 @@ class DB:
         """Find all documents in a collection with a specific merchant_id,
         returning some attributes of each"""
         documents = list(self.collection.find(query, projection))
+        # Make every document attributes serializable
         json_documents = json_util.dumps(documents)
         return json.loads(json_documents)
 
