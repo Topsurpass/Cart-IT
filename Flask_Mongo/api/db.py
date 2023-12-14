@@ -35,7 +35,6 @@ class DB:
         # Make every document attributes serializable
         json_documents = json_util.dumps(documents)
         return json.loads(json_documents)
-
     
     def update_merchant(self, query: Dict[str, Any], update_data: Dict[str, Any]) -> bool:
         """Update a document in the collection based document id"""

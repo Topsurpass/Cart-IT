@@ -28,6 +28,32 @@ def add_category():
     })
     return jsonify(message='New category added'),201
 
+@app_category.route('/edit/<string:index>', methods=['PUT'], strict_slashes=False)
+def edit_category(index):
+    """Edit category of a product by index"""
+    name = request.form.get('name')
+    description = request.form.get('description')
+    session_id = request.cookies.get('session_id')
+
+    if not all(key in request.form for key in ['name', 'description']):
+        return jsonify(message='Missing required fields'), 400
+    if not session_id:
+        abort(401)
+    merchant = AUTH.get_user_from_session_id(session_id)
+    if not merchant:
+        abort(403)
+    category_list = CATEGORY_db.find_all_merchant({'merchant_id': merchant['_id']})
+    if index < 0 or index >= len(category_list):
+        abort(404)
+    selected_category = category_list[index]
+
+    CATEGORY_db.update_merchant(
+        {'_id': selected_category['_id']},
+        {'name': name, 'description': description}
+    )
+    return jsonify(message='Category updated successfully'),200
+
+
 @app_category.route('/all', methods=['GET'], strict_slashes=False)
 def list_all_category():
     """List all the categories created by a user"""
