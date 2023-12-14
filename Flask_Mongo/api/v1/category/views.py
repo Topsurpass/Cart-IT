@@ -5,6 +5,7 @@ from api.v1.category import app_category
 from flask import jsonify, request, abort
 from api import AUTH
 from api import CATEGORY_db
+from bson import ObjectId
 
 
 @app_category.route('/new', methods=['POST'], strict_slashes=False)
@@ -51,7 +52,7 @@ def edit_category(index: int):
     selected_category = category_list[index]
 
     CATEGORY_db.update_merchant(
-        {'_id': selected_category['_id']},
+        {'_id': ObjectId(selected_category['_id'])},
         {'name': name, 'description': description}
     )
     return jsonify(message='Category updated successfully'),200
