@@ -42,7 +42,10 @@ def edit_category(index):
     merchant = AUTH.get_user_from_session_id(session_id)
     if not merchant:
         abort(403)
-    category_list = CATEGORY_db.find_all_merchant({'merchant_id': merchant['_id']})
+    projection = {
+        'merchant_id': 0
+    }
+    category_list = CATEGORY_db.find_all_merchant({'merchant_id': merchant['_id']}, projection)
     if index < 0 or index >= len(category_list):
         abort(404)
     selected_category = category_list[index]
