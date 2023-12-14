@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""This module contains routes for creating new category and product"""
+"""This module contains routes for creating new category of product"""
 
 from api.v1.category import app_category
 from flask import jsonify, request, abort
