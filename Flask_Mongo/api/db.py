@@ -40,6 +40,10 @@ class DB:
         """Update a document in the collection based document id"""
         result = self.collection.update_one(query, {'$set': update_data})
         return result
+    
+    def delete_merchant(self, query: Dict[str, Any])-> None:
+        """Deletes a merchant"""
+        self.collection.delete_one(query)
 
     def close_connection(self) -> None:
         """Close the MongoDB connection"""
