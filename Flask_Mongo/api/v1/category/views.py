@@ -28,8 +28,8 @@ def add_category():
     })
     return jsonify(message='New category added'),201
 
-@app_category.route('/edit/<string:index>', methods=['PUT'], strict_slashes=False)
-def edit_category(index):
+@app_category.route('/edit/<index>', methods=['PUT'], strict_slashes=False)
+def edit_category(index: str):
     """Edit category of a product by index"""
     name = request.form.get('name')
     description = request.form.get('description')
