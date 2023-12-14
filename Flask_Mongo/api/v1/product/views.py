@@ -25,13 +25,9 @@ def add_product():
     merchant = AUTH.get_user_from_session_id(session_id)
     if not merchant:
         abort(403)
-    category_dict = CATEGORY_db.find_merchant({'merchant_id': merchant['_id'], 'name': name})
+    category_dict = CATEGORY_db.find_merchant({'merchant_id': merchant['_id'], 'name': category})
     if not category_dict:
         abort(404)
-    _id_dict = category_dict.get('_id')
-    if not isinstance(_id_dict, dict) or '$oid' not in _id_dict:
-        abort(404)
-    category_id = ObjectId(_id_dict['$oid'])
     PRODUCT_db.insert_merchant({
         'name': name,
         'image_url': image_url,
@@ -40,6 +36,6 @@ def add_product():
         'price': price,
         'quantity': quantity,
         'merchant_id': merchant['_id'],
-        'category_id': category_id,
+        'category_id': category_dict['_id'],
     })
     return jsonify(message='New product added'),201
