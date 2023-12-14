@@ -42,7 +42,7 @@ class DB:
         return result
     
     def delete_merchant(self, query: Dict[str, Any])-> None:
-        """Deletes a merchant"""
+        """Deletes a merchant from db"""
         self.collection.delete_one(query)
 
     def close_connection(self) -> None:
