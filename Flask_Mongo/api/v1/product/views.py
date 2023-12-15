@@ -60,7 +60,8 @@ def edit_product(index: int):
         abort(403)
     category_dict = CATEGORY_db.find_merchant({'merchant_id': merchant['_id'], 'name': category})
     if not category_dict:
-        abort(404, 'Category does not exist')
+        return jsonify(message='Category does not exist'),404
+
     projection = {
         'name': 1,
         'image_url': 1,
