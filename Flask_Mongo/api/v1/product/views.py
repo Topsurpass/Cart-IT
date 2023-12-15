@@ -18,7 +18,7 @@ def add_product():
     quantity = request.form.get('quantity')
     session_id = request.cookies.get('session_id')
 
-    if not all(key in request.form for key in ['name', 'image_url', 'description', 'category', 'price', 'quantity']):
+    if not all(key in request.form for key in ['name', 'title', 'image_url', 'description', 'category', 'price', 'quantity']):
         return jsonify(message='Missing required fields'), 400
     if not session_id:
         abort(401)
@@ -35,6 +35,9 @@ def add_product():
         'category': category,
         'price': price,
         'quantity': quantity,
+        'seller': merchant['merchant'],
+        'phone': merchant['phone'],
+        'address': merchant['address'],
         'merchant_id': merchant['_id'],
         'category_id': category_dict['_id'],
     })
@@ -68,6 +71,9 @@ def edit_product(index: int):
         'category': 1,
         'price': 1,
         'quantity': 1,
+        'seller': 1,
+        'phone': 1,
+        'address': 1,
         'merchant_id': 1,
         'category_id': 1,
     }
@@ -111,6 +117,9 @@ def list_all_products():
         'category': 1,
         'price': 1,
         'quantity': 1,
+        'seller': 1,
+        'phone': 1,
+        'address': 1,
         'merchant_id': 1,
         'category_id': 1,
     }
