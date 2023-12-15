@@ -18,7 +18,7 @@ def add_product():
     quantity = request.form.get('quantity')
     session_id = request.cookies.get('session_id')
 
-    if not all(key in request.form for key in ['name', 'title', 'image_url', 'description', 'category', 'price', 'quantity']):
+    if not all(key in request.form for key in ['name', 'image_url', 'description', 'category', 'price', 'quantity']):
         return jsonify(message='Missing required fields'), 400
     if not session_id:
         abort(401)
