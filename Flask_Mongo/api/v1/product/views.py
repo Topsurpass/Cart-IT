@@ -102,32 +102,6 @@ def edit_product(index: int):
     )
     return jsonify(message='Product updated successfully'),200
 
-@app_product.route('/all', methods=['GET'], strict_slashes=False)
-def list_all_products():
-    """List all the Products created under a category by a user"""
-    session_id = request.cookies.get('session_id')
-    if not session_id:
-        abort(401)
-    merchant = AUTH.get_user_from_session_id(session_id)
-    if not merchant:
-        abort(403)
-    projection = {
-        'name': 1,
-        'image_url': 1,
-        'description': 1,
-        'category': 1,
-        'price': 1,
-        'quantity': 1,
-        'seller': 1,
-        'phone': 1,
-        'address': 1,
-        'merchant_id': 1,
-        'category_id': 1,
-    }
-    products = PRODUCT_db.find_all_merchant({'merchant_id': merchant['_id']}, projection)
-    return jsonify(products), 200
-
-
 @app_product.route('/delete/<int:index>', methods=['DELETE'], strict_slashes=False)
 def delete_category(index: int):
     """Delete a product from list of a merchant's products by index"""
@@ -158,3 +132,28 @@ def delete_category(index: int):
     
     PRODUCT_db.delete_merchant({'_id': _id})
     return jsonify(message='Product deleted successfully'),200
+
+@app_product.route('/all', methods=['GET'], strict_slashes=False)
+def list_all_products():
+    """List all the Products created under a category by a user"""
+    session_id = request.cookies.get('session_id')
+    if not session_id:
+        abort(401)
+    merchant = AUTH.get_user_from_session_id(session_id)
+    if not merchant:
+        abort(403)
+    projection = {
+        'name': 1,
+        'image_url': 1,
+        'description': 1,
+        'category': 1,
+        'price': 1,
+        'quantity': 1,
+        'seller': 1,
+        'phone': 1,
+        'address': 1,
+        'merchant_id': 1,
+        'category_id': 1,
+    }
+    products = PRODUCT_db.find_all_merchant({'merchant_id': merchant['_id']}, projection)
+    return jsonify(products), 200
