@@ -5,12 +5,14 @@ from api.v1.category import app_category
 from api.v1.product import app_product
 from api.v1.auth import app_auth
 from flask import Flask, jsonify
+from flask_cors import CORS
 import os
 
 app = Flask(__name__)
 app.register_blueprint(app_category)
 app.register_blueprint(app_product)
 app.register_blueprint(app_auth)
+CORS(app)
 
 
 @app.errorhandler(401)

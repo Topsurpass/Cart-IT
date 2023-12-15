@@ -35,13 +35,20 @@ class DB:
         # Make every document attributes serializable
         json_documents = json_util.dumps(documents)
         return json.loads(json_documents)
-
     
     def update_merchant(self, query: Dict[str, Any], update_data: Dict[str, Any]) -> bool:
         """Update a document in the collection based document id"""
         result = self.collection.update_one(query, {'$set': update_data})
         return result
+    
+    def delete_merchant(self, query: Dict[str, Any])-> None:
+        """Deletes a merchant from db"""
+        self.collection.delete_one(query)
 
+    def delete_all_merchant(self, query: Dict[str, Any])-> None:
+        """"Delete all merchants from db"""
+        self.collection.delete_many(query)
+        
     def close_connection(self) -> None:
         """Close the MongoDB connection"""
         self.client.close()
