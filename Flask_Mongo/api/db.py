@@ -45,6 +45,10 @@ class DB:
         """Deletes a merchant from db"""
         self.collection.delete_one(query)
 
+    def delete_all_merchant(self, query: Dict[str, Any])-> None:
+        """"Delete all merchants from db"""
+        self.collection.delete_many(query)
+        
     def close_connection(self) -> None:
         """Close the MongoDB connection"""
         self.client.close()

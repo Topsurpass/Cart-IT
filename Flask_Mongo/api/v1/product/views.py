@@ -127,3 +127,34 @@ def list_all_products():
     products = PRODUCT_db.find_all_merchant({'merchant_id': merchant['_id']}, projection)
     return jsonify(products), 200
 
+
+@app_product.route('/delete/<int:index>', methods=['DELETE'], strict_slashes=False)
+def delete_category(index: int):
+    """Delete a product from list of a merchant's products by index"""
+    session_id = request.cookies.get('session_id')
+    if not session_id:
+        abort(401)
+    merchant = AUTH.get_user_from_session_id(session_id)
+    if not merchant:
+        abort(403)
+    projection = {
+        '_id': 1,
+        'merchant_id': 1,
+        'name': 1,
+        'description': 1
+    }
+
+    product_list = PRODUCT_db.find_all_merchant({'merchant_id': merchant['_id']}, projection)
+    if len(product_list) == 0:
+        return jsonify(message='No product found')
+    if index < 0 or index >= len(product_list):
+        abort(404)
+    selected_product = product_list[index]
+    _id_dict = selected_product.get('_id')
+    if not isinstance(_id_dict, dict) or '$oid' not in _id_dict:
+        abort(404)
+
+    _id = ObjectId(_id_dict['$oid'])
+    
+    PRODUCT_db.delete_merchant({'_id': _id})
+    return jsonify(message='Product deleted successfully'),200

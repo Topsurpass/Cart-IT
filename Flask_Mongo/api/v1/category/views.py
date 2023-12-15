@@ -4,7 +4,7 @@
 from api.v1.category import app_category
 from flask import jsonify, request, abort
 from api import AUTH
-from api import CATEGORY_db
+from api import CATEGORY_db, PRODUCT_db
 from bson import ObjectId
 
 
@@ -91,9 +91,10 @@ def delete_category(index: int):
         abort(404)
 
     _id = ObjectId(_id_dict['$oid'])
-    
+
+    PRODUCT_db.delete_all_merchant({'category_id': _id})
     CATEGORY_db.delete_merchant({'_id': _id})
-    return jsonify(message='Category deleted successfully'),200
+    return jsonify(message='Category with all its products deleted successfully'),200
 
 
 @app_category.route('/all', methods=['GET'], strict_slashes=False)
