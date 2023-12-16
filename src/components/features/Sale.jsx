@@ -3,7 +3,7 @@ import hotSale from '../../utils/data/hotSale';
 
 const Sale = () => {
     return (
-        <div className="mt-10 border-b-2 pb-0 md:flex md:justify-between md:pb-10">
+        <div className="mt-10 pb-0 md:flex md:justify-between md:pb-10">
             <div className="w-full md:w-[40%]">
                 <h2 className="mb-0 text-xl font-bold md:mb-2 md:text-2xl">
                     About CartIt
