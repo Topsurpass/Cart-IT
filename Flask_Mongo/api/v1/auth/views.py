@@ -71,6 +71,7 @@ def merchantProfile():
     session_id = request.cookies.get("session_id")
     merchant = AUTH.get_user_from_session_id(session_id)
     if merchant:
-        return jsonify({'email': merchant['email']})
+        response = jsonify({'email': merchant['email']})
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
     abort(403)
     

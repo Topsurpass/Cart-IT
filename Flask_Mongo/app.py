@@ -12,7 +12,7 @@ app = Flask(__name__)
 app.register_blueprint(app_category)
 app.register_blueprint(app_product)
 app.register_blueprint(app_auth)
-CORS(app)
+CORS(app, supports_credentials=True)
 
 
 @app.errorhandler(401)
