@@ -8,13 +8,16 @@ import { LoginModal } from '@/pages/home/login-modal';
 import { RegisterModal } from '@/pages/home/register-modal';
 import { ViewProduct } from '@/pages/home/view-product-details';
 import { DefaultResponsiveNav } from '@/layout/DefaultResponsiveNav';
-
+import { useNavigate } from 'react-router-dom';
 
 export const HomePage = () => {
     const [openLoginModal, setOpenLoginModal] = useState(false);
     const [openRegisterModal, setopenRegisterModal] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [isItemSelected, setIsSelectedItem] = useState(false);
+    const navigate = useNavigate();
+    const homePage = () => navigate('/');
+    const dashBoardPage = () => navigate('/dashboard');
 
     const handleCloseLoginModal = () => {
         setOpenLoginModal(false);
@@ -27,7 +30,31 @@ export const HomePage = () => {
         setSelectedItem(item);
     };
 
-    
+    useEffect(() => {
+        const checkUserProfile = async () => {
+            try {
+                // Make a GET request to your API endpoint
+                const response = await axios.get(
+                    'http://localhost:5000/api/v1/auth/profile',
+                    {
+                        withCredentials: true, // Include credentials (cookies) in the request
+                    }
+                );
+
+                if (response.status === 200) {
+                    dashBoardPage();
+                }
+            } catch (error) {
+                // Handle API error
+                alert(error);
+                homePage();
+                setOpenLoginModal(true);
+            }
+        };
+
+        checkUserProfile();
+    }, []);
+
     return (
         <main className="px-5">
             <DefaultResponsiveNav

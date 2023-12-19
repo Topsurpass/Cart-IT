@@ -6,9 +6,13 @@ import { HeaderModal } from '@/components/ui/HeaderModal';
 import { useState } from 'react';
 import axios from 'axios';
 import Spinner from '@/components/ui/Spinner';
+import { useNavigate } from 'react-router-dom';
 
 export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
     const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
+    const homePage = () => navigate('/');
+
     const {
         register,
         handleSubmit,
@@ -33,7 +37,7 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
                 },
             })
             .then((response) => {
-                alert(response.message);
+                alert(response.data.message);
                 reset();
                 closeModal();
                 nowLogin();
