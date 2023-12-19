@@ -17,7 +17,6 @@ export const HomePage = () => {
     const [selectedItem, setSelectedItem] = useState(null);
     const [isItemSelected, setIsSelectedItem] = useState(false);
     const navigate = useNavigate();
-    const homePage = () => navigate('/');
     const dashBoardPage = () => navigate('/dashboard');
 
     const handleCloseLoginModal = () => {
@@ -39,16 +38,20 @@ export const HomePage = () => {
                     'http://localhost:5000/api/v1/auth/profile',
                     {
                         withCredentials: true, // Include credentials (cookies) in the request
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
                     }
                 );
 
                 if (response.status === 200) {
+                    alert(response.data.message);
+                    setOpenLoginModal(false);
                     dashBoardPage();
                 }
             } catch (error) {
                 // Handle API error
                 alert(error);
-                homePage();
                 setOpenLoginModal(true);
             }
         };
