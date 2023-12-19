@@ -8,7 +8,7 @@ import { LoginModal } from '@/pages/home/login-modal';
 import { RegisterModal } from '@/pages/home/register-modal';
 import { ViewProduct } from '@/pages/home/view-product-details';
 import { DefaultResponsiveNav } from '@/layout/DefaultResponsiveNav';
-import { handleLogin } from '@/api/auth';
+
 
 export const HomePage = () => {
     const [openLoginModal, setOpenLoginModal] = useState(false);
@@ -16,8 +16,9 @@ export const HomePage = () => {
     const [selectedItem, setSelectedItem] = useState(null);
     const [isItemSelected, setIsSelectedItem] = useState(false);
 
-
-    const handleCloseLoginModal = () => setOpenLoginModal(false);
+    const handleCloseLoginModal = () => {
+        setOpenLoginModal(false);
+    };
     const handleCloseRegisterModal = () => setopenRegisterModal(false);
     const handleCloseViewProductModal = () => setIsSelectedItem(false);
 
@@ -26,6 +27,7 @@ export const HomePage = () => {
         setSelectedItem(item);
     };
 
+    
     return (
         <main className="px-5">
             <DefaultResponsiveNav
@@ -80,12 +82,19 @@ export const HomePage = () => {
             <LoginModal
                 isOpen={openLoginModal}
                 closeModal={handleCloseLoginModal}
-                onLogin={handleLogin}
+                onSignup={() => {
+                    handleCloseLoginModal();
+                    setopenRegisterModal(true);
+                }}
             />
             <RegisterModal
                 isOpen={openRegisterModal}
                 closeModal={handleCloseRegisterModal}
                 nowLogin={() => setOpenLoginModal(true)}
+                onSignin={() => {
+                    handleCloseRegisterModal();
+                    setOpenLoginModal(true);
+                }}
             ></RegisterModal>
             {isItemSelected && (
                 <ViewProduct

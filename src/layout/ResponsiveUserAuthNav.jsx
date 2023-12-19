@@ -48,7 +48,7 @@ export const ResponsiveUserAuthNav = ({home}) => {
                         <div className="flex justify-center gap-10 self-center">
                             <Link
                                 to="/dashboard/products"
-                                className="text-lg text-blue-500 md:hover:underline"
+                                className="text-lg text-blue-500 md:hover:underline "
                             >
                                 Manage Product
                             </Link>

@@ -22,6 +22,7 @@ const catalog = [
             { phone: '09583637323', address: 'Igbekele-kalaba, Rivers' },
             { phone: '09583637323', address: 'George-Bush, Benin' },
         ],
+        quantity: 10,
     },
     {
         id: 2,
@@ -37,6 +38,7 @@ const catalog = [
             { phone: '09583637323', address: 'Km 8, Modomo, Ife' },
             { phone: '09583637323', address: 'Maryland Lagos' },
         ],
+        quantity: 30,
     },
     {
         id: 3,
@@ -52,6 +54,7 @@ const catalog = [
             { phone: '09583637323', address: 'Km 8, kajola, Ketu Lagos ' },
             { phone: '09583637323', address: 'Alagbaka Rivers' },
         ],
+        quantity: 15,
     },
     {
         id: 4,
@@ -68,6 +71,7 @@ const catalog = [
             { phone: '09583637323', address: 'Km 8, kajola, Yola ' },
             { phone: '09583637323', address: 'Epkerenere Adamawa' },
         ],
+        quantity: 4,
     },
     {
         id: 5,
@@ -83,6 +87,7 @@ const catalog = [
             { phone: '09583637323', address: 'Km 8, kajola, Akure ' },
             { phone: '09583637323', address: 'Epkerenere Kaduna' },
         ],
+        quantity: 12,
     },
     {
         id: 6,
@@ -99,6 +104,7 @@ const catalog = [
             { phone: '09583637323', address: 'Km 8, kajola, Akure ' },
             { phone: '09583637323', address: 'Epkerenere Cross-river' },
         ],
+        quantity: 10,
     },
     {
         id: 7,
@@ -113,6 +119,7 @@ const catalog = [
             { phone: '09583637323', address: 'Km 8, kajola, Akure ' },
             { phone: '09583637323', address: 'Alakija Abia' },
         ],
+        quantity: 101,
     },
     {
         id: 8,
@@ -128,6 +135,7 @@ const catalog = [
             { phone: '09583637323', address: 'Km 8, kajola, Akure ' },
             { phone: '09583637323', address: 'Km 19, Ifedore street, Ondo' },
         ],
+        quantity: 1,
     },
 ];
 
