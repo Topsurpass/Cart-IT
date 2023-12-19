@@ -45,6 +45,8 @@ export const HomePage = () => {
                 );
 
                 if (response.status === 200) {
+                    alert(response.data.message);
+                    setOpenLoginModal(false);
                     dashBoardPage();
                 }
             } catch (error) {
