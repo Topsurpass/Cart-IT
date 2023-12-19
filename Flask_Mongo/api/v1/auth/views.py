@@ -20,7 +20,7 @@ def registerMerchant():
     phone = data.get('phone')
     address = data.get('address')
 
-    if not all(key in request.form for key in ['merchant', 'email', 'username', 'password', 'phone', 'address']):
+    if not all(key in data for key in ['merchant', 'email', 'username', 'password', 'phone', 'address']):
         return jsonify(message='Missing required fields'), 400
     
     merchant_id = AUTH.register_merchant(merchant, email, username, password, phone, address)
