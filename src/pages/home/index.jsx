@@ -9,6 +9,7 @@ import { RegisterModal } from '@/pages/home/register-modal';
 import { ViewProduct } from '@/pages/home/view-product-details';
 import { DefaultResponsiveNav } from '@/layout/DefaultResponsiveNav';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export const HomePage = () => {
     const [openLoginModal, setOpenLoginModal] = useState(false);
