@@ -52,7 +52,7 @@ export const DefaultResponsiveNav = ({ openLogin, openReg, home }) => {
                         <button
                             type="button"
                             className="h-8 w-32 rounded-lg bg-sky-500 md:h-12"
-                            onClick={openLogin}
+                            onClick={openReg}
                         >
                             REGISTER
                         </button>

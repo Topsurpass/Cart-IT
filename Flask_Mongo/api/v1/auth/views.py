@@ -9,12 +9,16 @@ from api import AUTH
 @app_auth.route("/signup", methods=['POST'], strict_slashes=False)
 def registerMerchant():
     """Register merchant and save to the database"""
-    merchant = request.form.get('merchant')
-    email = request.form.get('email')
-    username = request.form.get('username')
-    password = request.form.get('password')
-    phone = request.form.get('phone')      
-    address = request.form.get('address')
+   # Retrieve JSON data from the request
+    data = request.get_json()
+
+    # Access data using keys
+    merchant = data.get('merchant')
+    email = data.get('email')
+    username = data.get('username')
+    password = data.get('password')
+    phone = data.get('phone')
+    address = data.get('address')
 
     if not all(key in request.form for key in ['merchant', 'email', 'username', 'password', 'phone', 'address']):
         return jsonify(message='Missing required fields'), 400
@@ -34,9 +38,10 @@ def registerMerchant():
 
 @app_auth.route("/login", methods=['POST'], strict_slashes=False)
 def loginMerchant():
+    data = request.get_json()
     """Login merchant, create token and redirect to /profile"""
-    email = request.form.get('email')
-    password = request.form.get('password')
+    email = data.get('email')
+    password = data.get('password')
 
     valid_merchant = AUTH.valid_login(email, password)
     if not valid_merchant:
@@ -57,7 +62,7 @@ def logoutMerchant():
     if not merchant:
         abort(403)
     AUTH.destroy_session(merchant['_id'])
-    return redirect('/testpage')
+    return jsonify(message='Merchant logout successfully')
 
 
 @app_auth.route("/profile", methods=['GET'], strict_slashes=False)

@@ -5,10 +5,20 @@ import { FormInput } from '@/components/features/FormInput';
 import { ButtonModal } from '@/components/ui/ButtonModal';
 import { HeaderModal } from '@/components/ui/HeaderModal';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import Spinner from '@/components/ui/Spinner';
+import axios from 'axios';
 
-export const LoginModal = ({ isOpen, closeModal, onLogin }) => {
+export const LoginModal = ({
+    isOpen,
+    closeModal,
+    onSignup,
+}) => {
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const dashboardPage = () => navigate('/dashboard');
+    const homePage = () => navigate('/');
+
     const {
         register,
         handleSubmit,
@@ -16,19 +26,33 @@ export const LoginModal = ({ isOpen, closeModal, onLogin }) => {
         formState: { errors },
     } = useForm();
 
-    const submitForm = async (data) => {
-        if (onLogin) {
-            try {
-                // Make  API call for submission N.B onLogin is an async fxn append await to it
-                await onLogin(data);
-                reset();
+    // This calls the API for user login authentication
+    const submitForm = async (formData) => {
+        const requestData = {
+            email: formData.email,
+            password: formData.password,
+        };
+        setIsLoading(true);
+        axios
+            .post('http://localhost:5000/api/v1/auth/login', requestData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then((response) => {
+                alert(response.message);
                 closeModal();
+                reset();
                 dashboardPage();
-            } catch (error) {
-                // Handle API submission error
-                console.error('Error submitting login details:', error);
-            }
-        }
+            })
+            .catch((error) => {
+                // Handle API error
+                alert(error);
+                homePage();
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
 
     return (
@@ -63,12 +87,13 @@ export const LoginModal = ({ isOpen, closeModal, onLogin }) => {
                     <ButtonModal title="Login" />
                 </div>
             </form>
-            <p className="mt-3 text-center text-sm">
+            <p className="mt-3 text-center text-sm" onClick={onSignup}>
                 Don't have an account ?{' '}
-                <a href="#" className="text-bold text-blue-500">
+                <span className="text-bold cursor-pointer text-blue-500">
                     Sign Up
-                </a>
+                </span>
             </p>
+            {isLoading && <Spinner />}
         </MyModal>
     );
 };

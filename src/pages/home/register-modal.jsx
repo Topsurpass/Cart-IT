@@ -3,8 +3,12 @@ import MyModal from '@/components/ui/Modal';
 import { ButtonModal } from '@/components/ui/ButtonModal';
 import { FormInput } from '@/components/features/FormInput';
 import { HeaderModal } from '@/components/ui/HeaderModal';
+import { useState } from 'react';
+import axios from 'axios';
+import Spinner from '@/components/ui/Spinner';
 
-export const RegisterModal = ({ isOpen, closeModal, nowLogin }) => {
+export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
+    const [isLoading, setIsLoading] = useState(false);
     const {
         register,
         handleSubmit,
@@ -12,11 +16,36 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin }) => {
         formState: { errors },
     } = useForm();
 
-    const submitForm = () => {
-        alert('Registered');
-        reset();
-        closeModal();
-        nowLogin();
+    const submitForm = (formData) => {
+        const requestData = {
+            merchant: formData.merchant,
+            email: formData.email,
+            username: formData.username,
+            password: formData.password,
+            phone: formData.phone,
+            address: formData.address,
+        };
+        setIsLoading(true);
+        axios
+            .post('http://localhost:5000/api/v1/auth/signup', requestData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then((response) => {
+                alert(response.message);
+                reset();
+                closeModal();
+                nowLogin();
+            })
+            .catch((error) => {
+                // Handle API error
+                alert(error);
+                homePage();
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
 
     return (
@@ -60,16 +89,6 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin }) => {
                         error={errors.fullname}
                     />
                     <FormInput
-                        labelName="Email Address"
-                        type="email"
-                        icon="*"
-                        validation={register('email', {
-                            required: true,
-                        })}
-                        errMessaage="Email is required"
-                        error={errors.email}
-                    />
-                    <FormInput
                         labelName="Username"
                         icon="*"
                         validation={register('username', {
@@ -82,7 +101,6 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin }) => {
                         errMessaage="Max length of 15 with 1 digit no special character"
                         error={errors.username}
                     />
-
                     <FormInput
                         type="password"
                         labelName="Password"
@@ -125,14 +143,18 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin }) => {
                     <div className="mt-4">
                         <ButtonModal title="Create Account" />
                     </div>
-                    <p className="mt-3 text-center text-sm">
+                    <p className="mt-3 text-center text-sm" onClick={onSignin}>
                         Already have an account ?{' '}
-                        <a href="#" className="text-bold text-blue-500">
+                        <span
+                            href="#"
+                            className="text-bold cursor-pointer text-blue-500"
+                        >
                             Login
-                        </a>
+                        </span>
                     </p>
                 </form>
             </div>
+            {isLoading && <Spinner />}
         </MyModal>
     );
 };
