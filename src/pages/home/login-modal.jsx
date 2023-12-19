@@ -9,15 +9,10 @@ import { useState } from 'react';
 import Spinner from '@/components/ui/Spinner';
 import axios from 'axios';
 
-export const LoginModal = ({
-    isOpen,
-    closeModal,
-    onSignup,
-}) => {
+export const LoginModal = ({ isOpen, closeModal, onSignup }) => {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const dashboardPage = () => navigate('/dashboard');
-    const homePage = () => navigate('/');
 
     const {
         register,
@@ -40,7 +35,7 @@ export const LoginModal = ({
                 },
             })
             .then((response) => {
-                alert(response.message);
+                alert(response.data.message);
                 closeModal();
                 reset();
                 dashboardPage();
@@ -48,7 +43,6 @@ export const LoginModal = ({
             .catch((error) => {
                 // Handle API error
                 alert(error);
-                homePage();
             })
             .finally(() => {
                 setIsLoading(false);
