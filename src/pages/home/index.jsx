@@ -30,34 +30,34 @@ export const HomePage = () => {
         setSelectedItem(item);
     };
 
-    useEffect(() => {
-        const checkUserProfile = async () => {
-            try {
-                // Make a GET request to your API endpoint
-                const response = await axios.get(
-                    'http://localhost:5000/api/v1/auth/profile',
-                    {
-                        withCredentials: true, // Include credentials (cookies) in the request
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                    }
-                );
+    // useEffect(() => {
+    //     const checkUserProfile = async () => {
+    //         try {
+    //             // Make a GET request to your API endpoint
+    //             const response = await axios.get(
+    //                 'http://localhost:5000/api/v1/auth/profile',
+    //                 {
+    //                     withCredentials: true, // Include credentials (cookies) in the request
+    //                     headers: {
+    //                         'Content-Type': 'application/json',
+    //                     },
+    //                 }
+    //             );
 
-                if (response.status === 200) {
-                    alert(response.data.message);
-                    setOpenLoginModal(false);
-                    dashBoardPage();
-                }
-            } catch (error) {
-                // Handle API error
-                alert(error);
-                setOpenLoginModal(true);
-            }
-        };
+    //             if (response.status === 200) {
+    //                 alert(response.data.message);
+    //                 setOpenLoginModal(false);
+    //                 dashBoardPage();
+    //             }
+    //         } catch (error) {
+    //             // Handle API error
+    //             alert(error);
+    //             setOpenLoginModal(true);
+    //         }
+    //     };
 
-        checkUserProfile();
-    }, []);
+    //     checkUserProfile();
+    // }, []);
 
     return (
         <main className="px-5">

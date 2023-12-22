@@ -20,6 +20,7 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
         formState: { errors },
     } = useForm();
 
+    //  Api call to register new merchant
     const submitForm = (formData) => {
         const requestData = {
             merchant: formData.merchant,
@@ -44,7 +45,7 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
             })
             .catch((error) => {
                 // Handle API error
-                alert(error);
+                alert(error.response.data.message);
                 homePage();
             })
             .finally(() => {

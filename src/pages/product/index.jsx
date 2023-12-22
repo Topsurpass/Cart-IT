@@ -20,6 +20,21 @@ export const ProductPage = () => {
 
     // Fake api call to list all product of a user
     // http://localhost:5000/api/v1/product/all GET
+    //  useEffect(() => {
+    //     try {
+    //         const response = axios.get('http://localhost:5000/api/v1/product/all', {
+    //             withCredentials: true, 
+    //         });
+    //         setCatalogProducts(response.data);
+    //         setLoading(false);
+    //     } catch (error){
+    //         alert(error.message)
+    //     }
+        
+
+    // }, []);
+
+    //Simulating api for product
     useEffect(() => {
         setTimeout(() => {
             setCatalogProducts(catalog);

@@ -30,6 +30,7 @@ export const LoginModal = ({ isOpen, closeModal, onSignup }) => {
         setIsLoading(true);
         axios
             .post('http://localhost:5000/api/v1/auth/login', requestData, {
+                withCredentials: true,
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -42,7 +43,7 @@ export const LoginModal = ({ isOpen, closeModal, onSignup }) => {
             })
             .catch((error) => {
                 // Handle API error
-                alert(error);
+                alert(error.response.data.message);
             })
             .finally(() => {
                 setIsLoading(false);
