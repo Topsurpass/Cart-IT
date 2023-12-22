@@ -5,21 +5,50 @@ import { ViewProduct } from '@/pages/home/view-product-details';
 import catalog from '@/utils/data/catalog';
 import SkeletonLoader from '@/components/ui/SkeletonLoader';
 import { ResponsiveUserAuthNav } from '@/layout/ResponsiveUserAuthNav';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export const DashBoard = () => {
     const [selectedItem, setSelectedItem] = useState(null);
     const [isItemSelected, setIsSelectedItem] = useState(false);
     const [catalogProducts, setCatalogProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+    const homePage = () => navigate('/');
 
     // Fake api call to list all product of a user
     // http://localhost:5000/api/v1/product/all
+    axios.defaults.withCredentials = true;
     useEffect(() => {
-        setTimeout(() => {
-            setCatalogProducts(catalog);
-            setLoading(false); // Set loading to false after the data is fetched
-        }, 5000);
+        try {
+            const response = axios.get('http://localhost:5000/api/v1/product/all', {
+                withCredentials: true, 
+            });
+            const data = response.data;
+            if (data){
+                setCatalogProducts(data);
+            }else {
+                homePage();
+            }  
+            setLoading(false);
+        } catch (error){
+            if (error.response && error.response.status === 401){
+                alert(error.response.statusText)
+                console.log(error.response.statusText)
+            }
+            // // alert(error.statusText)
+            // console.log(error)
+        }
+        
+
     }, []);
+
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         setCatalogProducts(catalog);
+    //         setLoading(false); // Set loading to false after the data is fetched
+    //     }, 5000);
+    // }, []);
 
     const handleCloseViewProductModal = () => setIsSelectedItem(false);
     const handleSelectItem = (item) => {
