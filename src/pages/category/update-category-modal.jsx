@@ -6,9 +6,10 @@ import { FormInput } from '@/components/features/FormInput';
 import { ButtonModal } from '@/components/ui/ButtonModal';
 import { HeaderModal } from '@/components/ui/HeaderModal';
 import { useNavigate } from 'react-router-dom';
-import { SelectModal } from '@/components/ui/SelectModal';
 
-export const UpdateProductModal = ({
+
+
+export const UpdateCategoryModal = ({
     isOpen,
     closeModal,
     onSubmit,
@@ -16,11 +17,10 @@ export const UpdateProductModal = ({
     spinner
 }) => {
     const navigate = useNavigate();
-    const productPage = () => navigate('/dashboard/products');
+    const categoryPage = () => navigate('/dashboard/category');
     const {
         register,
         handleSubmit,
-        reset,
         control,
         setValue,
         formState: { errors },
@@ -40,11 +40,10 @@ export const UpdateProductModal = ({
             try {
                 // Make  API call for adding new product N.B onAdd is an async fxn append await to it
                 await onSubmit();
-                reset();
-                productPage();
+                categoryPage();
             } catch (error) {
                 // Handle API submission error
-                console.error('Error adding product:', error);
+                console.error('Error adding category:', error);
             }
         }
     };
@@ -52,7 +51,7 @@ export const UpdateProductModal = ({
     return (
         <MyModal isOpen={isOpen} closeModal={closeModal} title="">
             <div className="flex w-full justify-center">
-                <HeaderModal closeModal={closeModal} title="Upadate product" />
+                <HeaderModal closeModal={closeModal} title="Upadate category" />
             </div>
 
             <form onSubmit={handleSubmit(submitForm)} className="mt-3">
@@ -62,17 +61,8 @@ export const UpdateProductModal = ({
                     validation={register('name', {
                         required: true,
                     })}
-                    errMessaage="Enter valid product name"
+                    errMessaage="Enter category name"
                     error={errors.name}
-                />
-                <FormInput
-                    labelName="image URL"
-                    icon="*"
-                    validation={register('image_url', {
-                        required: true,
-                    })}
-                    errMessaage="Enter image url"
-                    error={errors.image_url}
                 />
                 <FormInput
                     labelName="Description"
@@ -80,41 +70,14 @@ export const UpdateProductModal = ({
                     validation={register('description', {
                         required: true,
                     })}
-                    errMessaage="Enter valid product description"
+                    errMessaage="Describe your category"
                     error={errors.description}
                 />
-                <div className="flex gap-2">
-                    <FormInput
-                        labelName="Price"
-                        icon="*"
-                        validation={register('price', {
-                            required: true,
-                            pattern: {
-                                value: /^[0-9]+(\.[0-9]{1,2})?$/,
-                            },
-                        })}
-                        errMessaage="Price must be digits"
-                        error={errors.price}
-                    />
-                    <FormInput
-                        labelName="Quantity"
-                        icon="*"
-                        validation={register('quantity', {
-                            required: true,
-                            pattern: {
-                                value: /^[1-9]+$/,
-                            },
-                        })}
-                        errMessaage="Quantity must be digits and cannot be 0"
-                        error={errors.quantity}
-                    />
-                </div>
-                <SelectModal control={control} name="category" />
                 <div className="mt-4">
-                    <ButtonModal title="Update Product" />
+                    <ButtonModal title="Update category" />
                 </div>
-                {spinner}
             </form>
+            {spinner}
         </MyModal>
     );
 };

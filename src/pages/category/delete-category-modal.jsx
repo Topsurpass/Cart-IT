@@ -5,24 +5,24 @@ import { HeaderModal } from '@/components/ui/HeaderModal';
 import { useNavigate } from 'react-router-dom';
 
 
-export const DeleteProductModal = ({
+export const DeleteCategoryModal = ({
     isOpen,
     closeModal,
     onConfirm,
     spinner
 }) => {
     const navigate = useNavigate();
-    const productPage = () => navigate('/dashboard/products');
+    const categoryPage = () => navigate('/dashboard/category');
 
-    const deleteProduct = async (data) => {
+    const deleteCategory= async (data) => {
         if (onConfirm) {
             try {
                 // Make  API call for adding new product N.B onAdd is an async fxn append await to it
                 await onConfirm(data);
-                productPage();
+                categoryPage();
             } catch (error) {
                 // Handle API submission error
-                console.error('Error adding product:', error);
+                console.error('Error adding categry:', error);
             }
         }
     };
@@ -36,13 +36,13 @@ export const DeleteProductModal = ({
                 />
             </div>
             <h2 className="mt-5 text-center text-xl font-bold">
-                Are you sure you want to delete this product ?{' '}
+                Are you sure you want to delete this category ?{' '}
             </h2>
             <div className="mt-10 flex gap-5">
                 <ButtonModal title="No" btnFunction={closeModal} />
                 <ButtonModal
                     title="Yes"
-                    btnFunction={deleteProduct}
+                    btnFunction={deleteCategory}
                     addCol="w-[100%] justify-center rounded-md border border-transparent
              bg-red-500 px-4 py-2 text-lg font-bold text-white
               hover:bg-red-400 hover:text-white-900 focus:outline-none focus-visible:ring-2
