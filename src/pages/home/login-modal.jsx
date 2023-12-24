@@ -23,31 +23,47 @@ export const LoginModal = ({ isOpen, closeModal, onSignup }) => {
 
     // This calls the API for user login authentication
     const submitForm = async (formData) => {
-        const requestData = {
-            email: formData.email,
-            password: formData.password,
-        };
+        // const requestData = {
+        //     email: formData.email,
+        //     password: formData.password,
+        // };
+        // setIsLoading(true);
+        // axios
+        //     .post('http://localhost:5000/api/v1/auth/login', requestData, {
+        //         withCredentials: true,
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         },
+        //     })
+        //     .then((response) => {
+        //         alert(response.data.message);
+        //         closeModal();
+        //         reset();
+        //         dashboardPage();
+        //     })
+        //     .catch((error) => {
+        //         // Handle API error
+        //         alert(error.response.data.message);
+        //     })
+        //     .finally(() => {
+        //         setIsLoading(false);
+        //     });
         setIsLoading(true);
-        axios
-            .post('http://localhost:5000/api/v1/auth/login', requestData, {
-                withCredentials: true,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then((response) => {
-                alert(response.data.message);
+        setTimeout(() => {
+            
+            try {
+                alert('Sigin in successfully');
                 closeModal();
                 reset();
                 dashboardPage();
-            })
-            .catch((error) => {
-                // Handle API error
-                alert(error.response.data.message);
-            })
-            .finally(() => {
+            } catch (error) {
+                alert(error);
+            } finally {
                 setIsLoading(false);
-            });
+            }
+            
+            // setLoading(false); // Set loading to false after the data is fetched
+        }, 2000);
     };
 
     return (

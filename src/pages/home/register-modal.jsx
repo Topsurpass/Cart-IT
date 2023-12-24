@@ -22,35 +22,50 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
 
     //  Api call to register new merchant
     const submitForm = (formData) => {
-        const requestData = {
-            merchant: formData.merchant,
-            email: formData.email,
-            username: formData.username,
-            password: formData.password,
-            phone: formData.phone,
-            address: formData.address,
-        };
+        // const requestData = {
+        //     merchant: formData.merchant,
+        //     email: formData.email,
+        //     username: formData.username,
+        //     password: formData.password,
+        //     phone: formData.phone,
+        //     address: formData.address,
+        // };
+        // setIsLoading(true);
+        // axios
+        //     .post('http://localhost:5000/api/v1/auth/signup', requestData, {
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         },
+        //     })
+        //     .then((response) => {
+        //         alert(response.data.message);
+        //         reset();
+        //         closeModal();
+        //         nowLogin();
+        //     })
+        //     .catch((error) => {
+        //         // Handle API error
+        //         alert(error.response.data.message);
+        //         homePage();
+        //     })
+        //     .finally(() => {
+        //         setIsLoading(false);
+        //     });
         setIsLoading(true);
-        axios
-            .post('http://localhost:5000/api/v1/auth/signup', requestData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then((response) => {
-                alert(response.data.message);
+        setTimeout(() => {          
+            try {
+                alert('Sigup successfully');          
                 reset();
                 closeModal();
                 nowLogin();
-            })
-            .catch((error) => {
-                // Handle API error
-                alert(error.response.data.message);
-                homePage();
-            })
-            .finally(() => {
+            } catch (error) {
+                alert(error);
+            } finally {
                 setIsLoading(false);
-            });
+            }
+            
+            // setLoading(false); // Set loading to false after the data is fetched
+        }, 2000);
     };
 
     return (
