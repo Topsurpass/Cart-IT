@@ -7,6 +7,8 @@ import TableSkeletonLoader from '@/components/ui/TableSkeletonLoaded';
 import { AddProductModal } from './add-product-modal';
 import { UpdateProductModal } from './update-product-modal';
 import { DeleteProductModal } from './delete-product-modal';
+import Spinner from '@/components/ui/Spinner';
+
 
 export const ProductPage = () => {
     const [catalogProducts, setCatalogProducts] = useState([]);
@@ -17,6 +19,7 @@ export const ProductPage = () => {
     const [deletedItem, setDeletedItem] = useState(null);
     const [updateItem, setUpdateItem] = useState(null);
     const [initialFormValues, setInitialFormValues] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     // Fake api call to list all product of a user
     // http://localhost:5000/api/v1/product/all GET
@@ -42,6 +45,12 @@ export const ProductPage = () => {
         }, 5000);
     }, []);
 
+    
+    /**
+     * Select table row to update
+     * @param {Table row} row 
+     */
+ 
     const selectUpdateProduct = (row) => {
         // Extract data from the row for initializing form fields
         const initialValues = {
@@ -55,6 +64,11 @@ export const ProductPage = () => {
         setOpenUpdateModal(true);
         setUpdateItem(row);
     };
+
+    /**
+     * Select table row to delete
+     * @param {Table row} row 
+     */
     const SelectDeleteProduct = (row) => {
         setOpenDeleteModal(true);
         setDeletedItem(row);
@@ -64,37 +78,63 @@ export const ProductPage = () => {
     const handleSubmitAddProduct = async (formData) => {
         // This calls the API for user add product
         //http//localhost:5000/api/v1/product/new POST
-        try {
-            // Make your API request here using formData
-            // Example: await api/product/add(formData);
-            alert('New product added:', formData);
-            console.log(formData);
-        } catch (error) {
-            // Handle API error
-            console.error('API request failed:', error);
-        }
+        setIsLoading(true);
+        setTimeout(() => {
+            try {
+                // Make your API request here using formData
+                // Example: await api/product/add(formData);
+                alert('New product added:', formData);
+                setOpenAddModal(false);
+            } catch (error) {
+                // Handle API error
+                console.error('API request failed:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        }, 2000);
     };
 
     const handleSubmitUpdateProduct = async (formData) => {
         // This calls the API for user update product
         //http//localhost:5000/api/v1/product/edit/index PUT
-        try {
-            // Make your API request here using formData
-            // Example: await api/product/add(formData);
-            alert('Product Updated:', updateItem);
-            console.log(updateItem);
-        } catch (error) {
-            // Handle API error
-            console.error('API request failed:', error);
-        }
+        setIsLoading(true);
+        setTimeout(() => {
+            try {
+                // Make your API request here using formData
+                // Example: await api/product/add(formData);
+                alert('Product Updated:', updateItem);
+                setOpenUpdateModal(false);
+            } catch (error) {
+                // Handle API error
+                console.error('API request failed:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        }, 2000);
+        
     };
     
     const handleSubmitDeleteProduct = (row) => {
         // Api call to delete the row
         // http://localhost:5000/api/v1/product/delete/index
-        alert(
-            `${row.original.productTitle} of index ${row.index} deleted`
-        );
+        setIsLoading(true);
+        setTimeout(() => {
+            
+            try {
+                // Make your API request here using formData
+                // Example: await api/product/add(formData);
+                alert(
+                    `${row.original.productTitle} of index ${row.index} deleted`
+                );
+                setOpenDeleteModal(false);
+            } catch (error) {
+                // Handle API error
+                console.error('API request failed:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        }, 2000);
+       
     };
 
     const columns = [
@@ -175,8 +215,8 @@ export const ProductPage = () => {
                         setOpenAddModal(false);
                         setInitialFormValues(null);
                     }}
-                    initialFormValues={initialFormValues}
                     onSubmit={handleSubmitAddProduct}
+                    spinner={isLoading && <Spinner/>}
                 />
             )}
             {openUpdateModal && (
@@ -187,6 +227,7 @@ export const ProductPage = () => {
                         setInitialFormValues(null);
                     }}
                     initialFormValues={initialFormValues}
+                    spinner = {isLoading && <Spinner/>}
                     onSubmit={handleSubmitUpdateProduct}
                 />
             )}
@@ -197,6 +238,7 @@ export const ProductPage = () => {
                         setOpenDeleteModal(false);
                         setDeletedItem(null);
                     }}
+                    spinner = {isLoading && <Spinner/>}
                     onConfirm={() => handleSubmitDeleteProduct(deletedItem)}
                 />
             )}

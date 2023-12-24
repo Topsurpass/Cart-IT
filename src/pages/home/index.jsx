@@ -17,7 +17,7 @@ export const HomePage = () => {
     const [selectedItem, setSelectedItem] = useState(null);
     const [isItemSelected, setIsSelectedItem] = useState(false);
     const navigate = useNavigate();
-    const dashBoardPage = () => navigate('/dashboard');
+    // const dashBoardPage = () => navigate('/dashboard');
 
     const handleCloseLoginModal = () => {
         setOpenLoginModal(false);

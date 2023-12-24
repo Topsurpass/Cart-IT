@@ -18,37 +18,34 @@ export const DashBoard = () => {
 
     // Fake api call to list all product of a user
     // http://localhost:5000/api/v1/product/all
-    axios.defaults.withCredentials = true;
-    useEffect(() => {
-        try {
-            const response = axios.get('http://localhost:5000/api/v1/product/all', {
-                withCredentials: true, 
-            });
-            const data = response.data;
-            if (data){
-                setCatalogProducts(data);
-            }else {
-                homePage();
-            }  
-            setLoading(false);
-        } catch (error){
-            if (error.response && error.response.status === 401){
-                alert(error.response.statusText)
-                console.log(error.response.statusText)
-            }
-            // // alert(error.statusText)
-            // console.log(error)
-        }
+    // useEffect(() => {
+    //     try {
+    //         const response = axios.get('http://localhost:5000/api/v1/product/all', {
+    //             withCredentials: true, 
+    //         });
+    //         const data = response.data;
+    //         if (data){
+    //             setCatalogProducts(data);
+    //         }else {
+    //             homePage();
+    //         }  
+    //         setLoading(false);
+    //     } catch (error){
+    //         if (error.response && error.response.status === 401){
+    //             alert(error.response.statusText)
+    //             console.log(error.response.statusText)
+    //         }
+    //     }
         
 
-    }, []);
-
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         setCatalogProducts(catalog);
-    //         setLoading(false); // Set loading to false after the data is fetched
-    //     }, 5000);
     // }, []);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setCatalogProducts(catalog);
+            setLoading(false); // Set loading to false after the data is fetched
+        }, 2000);
+    }, []);
 
     const handleCloseViewProductModal = () => setIsSelectedItem(false);
     const handleSelectItem = (item) => {
