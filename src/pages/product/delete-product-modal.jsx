@@ -2,7 +2,6 @@ import React from 'react';
 import MyModal from '@/components/ui/Modal';
 import { ButtonModal } from '@/components/ui/ButtonModal';
 import { HeaderModal } from '@/components/ui/HeaderModal';
-import { useNavigate } from 'react-router-dom';
 
 
 export const DeleteProductModal = ({
@@ -11,19 +10,13 @@ export const DeleteProductModal = ({
     onConfirm,
     spinner
 }) => {
-    const navigate = useNavigate();
-    const productPage = () => navigate('/dashboard/products');
 
-    const deleteProduct = async (data) => {
+    /**
+     * Call the function when 'YES' is selected to delete a product
+     */
+    const deleteProduct = async () => {
         if (onConfirm) {
-            try {
-                // Make  API call for adding new product N.B onAdd is an async fxn append await to it
-                await onConfirm(data);
-                productPage();
-            } catch (error) {
-                // Handle API submission error
-                console.error('Error adding product:', error);
-            }
+            await onConfirm();
         }
     };
 

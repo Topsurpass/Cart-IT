@@ -1,5 +1,5 @@
-import React from 'react';
 import MyModal from '@/components/ui/Modal';
+
 
 export const ViewProduct = ({ isOpen, closeModal, item }) => {
     return (
@@ -10,13 +10,13 @@ export const ViewProduct = ({ isOpen, closeModal, item }) => {
                 </h1>
                 <div className="mt-2 flex items-start justify-start gap-3 text-justify">
                     <img
-                        src={item.img}
-                        alt={item.productTitle}
+                        src={item.image_url}
+                        alt={item.name}
                         className="w-1/3"
                     />
                     <div className="flex flex-col gap-3 font-serif text-sm">
                         <p className="text-lg  text-black">
-                            {item.productTitle}
+                            {item.name}
                         </p>
                         <div className="flex gap-3  text-gray-500">
                             <div className="rounded-md bg-slate-200 p-1">
@@ -43,14 +43,10 @@ export const ViewProduct = ({ isOpen, closeModal, item }) => {
                     </h2>
                     <h2 className="text-xl font-bold">{item.seller}</h2>
 
-                    {item.contact.map((seller, idx) => {
-                        return (
-                            <div className="flex gap-10" key={idx}>
-                                <li className="pl-5">{seller.phone}</li>
-                                <p>{seller.address}</p>
-                            </div>
-                        );
-                    })}
+                    <div className="flex gap-10">
+                        <li className="pl-5">{item.phone}</li>
+                        <p>{item.address}</p>
+                    </div>       
                 </div>
             </div>
         </MyModal>

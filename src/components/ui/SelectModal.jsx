@@ -1,11 +1,31 @@
-import { useState, Fragment } from 'react';
+import { useState, Fragment, useEffect } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { Controller } from 'react-hook-form'; 
 import categoryData from '@/utils/data/categoryData';
 import { Check } from 'lucide-react';
+import axios from 'axios';
 
-export const SelectModal = ({ control, name }) => {
-    const [selectedCategory, setSelectedCategory] = useState(categoryData[0]);
+export const SelectModal = ({ control, name}) => {
+    const [selectedCategory, setSelectedCategory] = useState([]);
+
+    useEffect(()=>{
+        const fetchData = async () =>{
+            try {
+                const response = await axios.get('http://localhost:5000/api/v1/category/all', {
+                    withCredentials: true,
+                });
+                setSelectedCategory(response.data);          
+                
+            } catch (error) {
+                alert(error.response.data.message);
+                if (error.response && error.response.status === 401){                    
+                    homePage();
+                };    
+            }
+        };
+        fetchData();
+     
+    }, [])
 
     return (
         <div className="mt-5">

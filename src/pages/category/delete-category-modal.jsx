@@ -11,19 +11,15 @@ export const DeleteCategoryModal = ({
     onConfirm,
     spinner
 }) => {
-    const navigate = useNavigate();
-    const categoryPage = () => navigate('/dashboard/category');
+
+    /**
+     * It gets called when the submit button is clicked
+     * @param {Object} data 
+     */
 
     const deleteCategory= async (data) => {
         if (onConfirm) {
-            try {
-                // Make  API call for adding new product N.B onAdd is an async fxn append await to it
-                await onConfirm(data);
-                categoryPage();
-            } catch (error) {
-                // Handle API submission error
-                console.error('Error adding categry:', error);
-            }
+            await onConfirm(data);
         }
     };
 
