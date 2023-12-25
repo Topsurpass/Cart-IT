@@ -34,6 +34,7 @@ def add_category():
         'description': description
     })
     return jsonify(message='New category {} added'.format(name)),201
+    
 
 @app_category.route('/edit/<int:index>', methods=['PUT'], strict_slashes=False)
 def edit_category(index: int):
