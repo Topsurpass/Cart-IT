@@ -3,20 +3,46 @@
 from bson import json_util
 from pymongo import MongoClient
 from typing import Dict, Any, List, Union
+from urllib.parse import quote_plus
 import json
 import os
 
-host = os.getenv("API_HOST", "localhost")
-port = os.getenv("API_PORT", 27017)
+# host = os.getenv("API_HOST", "localhost")
+# port = os.getenv("API_PORT", 27017)
+
 
 class DB:
     """The mongo db database where our data are saved"""
 
     def __init__(self, db: str, collection: str) -> None:
         """Initialize the database instance"""
-        self.client = MongoClient(host, port)
+        # self.client = MongoClient(host, port)
+        # self.db = self.client[db]
+        # self.collection = self.db[collection]
+
+        username = 'temitopeabiodun685'
+        password = 'Temitope@12'
+        cluster_url = 'cluster0.bumxezy.mongodb.net'
+        
+        # Properly escape username and password
+        escaped_username = quote_plus(username)
+        escaped_password = quote_plus(password)
+        
+        # Construct the MongoDB connection string
+        mongo_url = f'mongodb+srv://{escaped_username}:{escaped_password}@{cluster_url}/?retryWrites=true&w=majority'
+        
+        # Create a MongoClient instance
+        self.client = MongoClient(mongo_url)
+        
+        # Access the specified database and collection
         self.db = self.client[db]
         self.collection = self.db[collection]
+
+
+
+
+
+
 
     def insert_merchant(self, data: Dict[str, Any]) -> Any:
         """Insert new data into the db and return its ID"""
