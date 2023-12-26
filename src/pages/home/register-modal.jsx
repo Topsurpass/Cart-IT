@@ -20,7 +20,10 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
         formState: { errors },
     } = useForm();
 
-    //  Api call to register new merchant
+    /**
+     * Make API call to the server to register new merchant or user
+     * @param {Object} formData 
+     */
     const submitForm = (formData) => {
         const requestData = {
             merchant: formData.merchant,
@@ -122,6 +125,7 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
                     <FormInput
                         labelName="Phone"
                         icon="*"
+                        placeholder= "08012345678"
                         validation={register('phone', {
                             required: true,
                             pattern: {

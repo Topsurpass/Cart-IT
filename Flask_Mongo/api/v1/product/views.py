@@ -28,7 +28,7 @@ def add_product():
         abort(403)
     category_dict = CATEGORY_db.find_merchant({'merchant_id': merchant['_id'], 'name': category})
     if not category_dict:
-        return jsonify(message='Category {} does not exists'.format(category)), 404
+        return jsonify(message='Merchant does not have category {} created. Kindly create the category and try again.'.format(category)), 404
     
     existing_product = PRODUCT_db.find_merchant({"merchant_id": merchant['_id'], "name": name})
     if existing_product:

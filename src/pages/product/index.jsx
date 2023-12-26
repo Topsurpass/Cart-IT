@@ -1,12 +1,16 @@
 import { ResponsiveUserAuthNav } from '@/layout/ResponsiveUserAuthNav';
 import Catalog from '@/components/features/Catalog';
 import Table from '@/components/features/Table';
-import catalog from '@/utils/data/catalog';
+import axios from 'axios';
 import { useState, useEffect } from 'react';
 import TableSkeletonLoader from '@/components/ui/TableSkeletonLoaded';
 import { AddProductModal } from './add-product-modal';
 import { UpdateProductModal } from './update-product-modal';
 import { DeleteProductModal } from './delete-product-modal';
+import Spinner from '@/components/ui/Spinner';
+import { useNavigate } from 'react-router-dom';
+
+
 
 export const ProductPage = () => {
     const [catalogProducts, setCatalogProducts] = useState([]);
@@ -17,89 +21,156 @@ export const ProductPage = () => {
     const [deletedItem, setDeletedItem] = useState(null);
     const [updateItem, setUpdateItem] = useState(null);
     const [initialFormValues, setInitialFormValues] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
-    // Fake api call to list all product of a user
-    // http://localhost:5000/api/v1/product/all GET
-    //  useEffect(() => {
-    //     try {
-    //         const response = axios.get('http://localhost:5000/api/v1/product/all', {
-    //             withCredentials: true, 
-    //         });
-    //         setCatalogProducts(response.data);
-    //         setLoading(false);
-    //     } catch (error){
-    //         alert(error.message)
-    //     }
-        
+    const navigate = useNavigate();
+    const homePage = () => navigate('/');
 
-    // }, []);
 
-    //Simulating api for product
+
+    /**
+     * Get all products stored in database for a particular merchat / user
+     */
     useEffect(() => {
-        setTimeout(() => {
-            setCatalogProducts(catalog);
-            setLoading(false); // Set loading to false after the data is fetched
-        }, 5000);
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api/v1/product/all', {
+                    withCredentials: true,
+                });
+                setCatalogProducts(response.data);          
+                setLoading(false);
+            } catch (error) {
+                alert(error.response.data.error);
+                if (error.response && error.response.status === 401){
+                    homePage();
+                };             
+            }
+        };
+        fetchData();
     }, []);
-
+    
+    /**
+     * Select table row to update.
+     * Extract data from the row and initialize the form fields with it
+     * @param {Table row} row 
+     */
+ 
     const selectUpdateProduct = (row) => {
-        // Extract data from the row for initializing form fields
         const initialValues = {
-            name: row.original.productTitle,
+            name: row.original.name,
             image_url: row.original.image_url,
             description: row.original.description,
             price: row.original.price,
             quantity: row.original.quantity,
+            index: row.index,
         };
         setInitialFormValues(initialValues);
         setOpenUpdateModal(true);
         setUpdateItem(row);
     };
+
+    /**
+     * Select table row to delete
+     * @param {Table row} row 
+     */
     const SelectDeleteProduct = (row) => {
         setOpenDeleteModal(true);
         setDeletedItem(row);
     };
     
-    
+    /**
+     * This calls the API for adding new product
+     * Form to be set to the server
+     * @param {Object} formData 
+     */
     const handleSubmitAddProduct = async (formData) => {
-        // This calls the API for user add product
-        //http//localhost:5000/api/v1/product/new POST
+        setIsLoading(true);
+        const userData = {
+            name: formData.name,
+            image_url: formData.image_url,
+            description: formData.description,
+            category: formData.category.name,
+            price: formData.price,
+            quantity: formData.quantity
+        }
         try {
-            // Make your API request here using formData
-            // Example: await api/product/add(formData);
-            alert('New product added:', formData);
-            console.log(formData);
+            const response = await axios.post('http://localhost:5000/api/v1/product/new', userData, {
+                withCredentials: true,
+            });
+            alert(response.data.message);
+            setOpenAddModal(false);
+            window.location.reload();  
         } catch (error) {
-            // Handle API error
-            console.error('API request failed:', error);
+            alert(error.response.data.message);
+            if (error.response && error.response.status === 401){
+                homePage();
+            };
+        } finally {
+            setIsLoading(false);
         }
     };
 
+    /**
+     * This calls the API for updating user's product
+     * @param {Object} formData 
+     */
     const handleSubmitUpdateProduct = async (formData) => {
-        // This calls the API for user update product
-        //http//localhost:5000/api/v1/product/edit/index PUT
+        setIsLoading(true);
+        const userData = {
+            name: formData.name,
+            image_url: formData.image_url,
+            description: formData.description,
+            category: formData.category.name,
+            price: formData.price,
+            quantity: formData.quantity
+        }
+        const idx = initialFormValues.index;
         try {
-            // Make your API request here using formData
-            // Example: await api/product/add(formData);
-            alert('Product Updated:', updateItem);
-            console.log(updateItem);
+            const response = await axios.put(`http://localhost:5000/api/v1/product/edit/${idx}`, userData, {
+                withCredentials: true,
+            });
+            alert(response.data.message);
+            setOpenUpdateModal(false);
+            window.location.reload();  
         } catch (error) {
-            // Handle API error
-            console.error('API request failed:', error);
+            alert(error.response.data.message);
+            if (error.response && error.response.status === 401){
+                homePage();
+            };
+        } finally {
+            setIsLoading(false);
         }
     };
+
+    /**
+     * This calls the API for deleting user's product
+     */
     
-    const handleSubmitDeleteProduct = (row) => {
-        // Api call to delete the row
-        // http://localhost:5000/api/v1/product/delete/index
-        alert(
-            `${row.original.productTitle} of index ${row.index} deleted`
-        );
+    const handleSubmitDeleteProduct = async () => {
+        setIsLoading(true);
+        const idx = deletedItem.index;
+        try {
+            const response = await axios.delete(`http://localhost:5000/api/v1/product/delete/${idx}`, {
+                withCredentials: true,
+            });
+            alert(response.data.message);
+            setOpenDeleteModal(false);
+            window.location.reload();
+        } catch (error) {
+            alert(error.response.data.message);
+            if (error.response && error.response.status === 401){
+                alert(error.response.data.message);
+                homePage();
+            }
+        } finally {
+            setIsLoading(false);
+        }
     };
 
+    // The table's column
     const columns = [
         {
-            accessorKey: 'productTitle', //access nested data with dot notation
+            accessorKey: 'name',
             header: 'Name',
             size: 100,
         },
@@ -109,7 +180,12 @@ export const ProductPage = () => {
             size: 400,
         },
         {
-            accessorKey: 'price', //normal accessorKey
+            accessorKey: 'category',
+            header: 'Category',
+            size: 100,
+        },
+        {
+            accessorKey: 'price',
             header: 'Price',
             size: 50,
         },
@@ -175,8 +251,8 @@ export const ProductPage = () => {
                         setOpenAddModal(false);
                         setInitialFormValues(null);
                     }}
-                    initialFormValues={initialFormValues}
                     onSubmit={handleSubmitAddProduct}
+                    spinner={isLoading && <Spinner/>}
                 />
             )}
             {openUpdateModal && (
@@ -187,6 +263,7 @@ export const ProductPage = () => {
                         setInitialFormValues(null);
                     }}
                     initialFormValues={initialFormValues}
+                    spinner = {isLoading && <Spinner/>}
                     onSubmit={handleSubmitUpdateProduct}
                 />
             )}
@@ -197,6 +274,7 @@ export const ProductPage = () => {
                         setOpenDeleteModal(false);
                         setDeletedItem(null);
                     }}
+                    spinner = {isLoading && <Spinner/>}
                     onConfirm={() => handleSubmitDeleteProduct(deletedItem)}
                 />
             )}

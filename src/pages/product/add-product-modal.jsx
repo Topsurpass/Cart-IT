@@ -1,11 +1,9 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
 import MyModal from '@/components/ui/Modal';
 import { FormInput } from '@/components/features/FormInput';
 import { ButtonModal } from '@/components/ui/ButtonModal';
 import { HeaderModal } from '@/components/ui/HeaderModal';
-import { useNavigate } from 'react-router-dom';
 import { SelectModal } from '@/components/ui/SelectModal';
 
 
@@ -13,40 +11,23 @@ export const AddProductModal = ({
     isOpen,
     closeModal,
     onSubmit,
-    initialFormValues,
+    spinner
 }) => {
-    const navigate = useNavigate();
-    const productPage = () => navigate('/dashboard/products');
     const {
         register,
         handleSubmit,
-        reset,
         control,
-        setValue,
         formState: { errors },
-    } = useForm({ defaultValues: initialFormValues });
+    } = useForm();
     
-    useEffect(() => {
-        // Use useEffect to update form values when initialFormValues change
-        if (initialFormValues) {
-            Object.entries(initialFormValues).forEach(([key, value]) => {
-                setValue(key, value);
-            });
-        }
-    }, [initialFormValues, setValue]);
 
+    /**
+     * The function gets called when the form is submitted
+     * @param {Object} data 
+     */
     const submitForm = async (data) => {
         if (onSubmit) {
-            try {
-                // Make  API call for adding new product N.B onAdd is an async fxn append await to it
-                await onSubmit(data);
-                reset();
-                closeModal();
-                productPage();
-            } catch (error) {
-                // Handle API submission error
-                console.error('Error adding product:', error);
-            }
+            await onSubmit(data);
         }
     };
 
@@ -118,6 +99,7 @@ export const AddProductModal = ({
                     <ButtonModal title="Create Product" />
                 </div>
             </form>
+            {spinner}
         </MyModal>
     );
 };

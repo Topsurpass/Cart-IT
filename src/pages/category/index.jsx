@@ -1,39 +1,170 @@
 import { ResponsiveUserAuthNav } from '@/layout/ResponsiveUserAuthNav';
 import Catalog from '@/components/features/Catalog';
 import Table from '@/components/features/Table';
-import categoryData from '@/utils/data/categoryData';
 import { useState, useEffect } from 'react';
 import TableSkeletonLoader from '@/components/ui/TableSkeletonLoaded';
+import { AddCategoryModal } from '@/pages/category/add-category-modal';
+import { UpdateCategoryModal } from '@/pages/category/update-category-modal';
+import { DeleteCategoryModal } from '@/pages/category/delete-category-modal';
+import Spinner from '@/components/ui/Spinner';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+
 
 export const CategoryPage = () => {
     const [category, setCategory] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isSpinning, setIsSpinning] = useState(false);
+    const [openAddModal, setOpenAddModal] = useState(false);
+    const [openUpdateModal, setOpenUpdateModal] = useState(false);
+    const [openDeleteModal, setOpenDeleteModal] = useState(false);
+    const [initialFormValues, setInitialFormValues] = useState(null);
+    const [updateItem, setUpdateItem] = useState(null);
+    const [deletedItem, setDeletedItem] = useState(null);
 
-    // Fake api call to list all product of a user
-    // http://localhost:5000/api/v1/product/all
+    const navigate = useNavigate();
+    const homePage = () => navigate('/');
+
+     /**
+     * Get all category stored in database for a particular merchat / user
+     */
     useEffect(() => {
-        setTimeout(() => {
-            setCategory(categoryData);
-            setLoading(false); // Set loading to false after the data is fetched
-        }, 5000);
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api/v1/category/all', {
+                    withCredentials: true,
+                });
+                setCategory(response.data);          
+                
+            } catch (error) {
+                alert(error.response.data.error);
+                if (error.response && error.response.status === 401){                    
+                    homePage();
+                };    
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
     }, []);
 
-    const handleEdit = (row) => {
-        // Api call to edit the row
-        // http://localhost:5000/api/v1/catalog/edit/index
-        alert(`${row.original.categoryName} category of index ${row.index} edited`);
-    };
-    const handleDelete = (row) => {
-        // Api call to delete the row
-        // http://localhost:5000/api/v1/catalog/delete/index
-        alert(
-            `${row.original.categoryName} category of index ${row.index} deleted`
-        );
+
+     /**
+     * Select table row to update.
+     * Extract data from the row and initialize the form fields with it
+     * @param {Table row} row 
+     */
+
+    const selectUpdateCategory = (row) => {
+        const initialValues = {
+            name: row.original.name,
+            description: row.original.description,
+        };
+        setInitialFormValues(initialValues);
+        setOpenUpdateModal(true);
+        setUpdateItem(row);
     };
 
+    /**
+     * Select table row to delete
+     * @param {Table row} row 
+     */
+    const SelectDeleteCategory = (row) => {
+        setOpenDeleteModal(true);
+        setDeletedItem(row);
+    };
+
+
+    /**
+     * This calls the API for adding new category
+     * Form to be set to the server
+     * @param {Object} formData 
+     */
+    const handleSubmitAddCategory= async (formData) => {
+        setIsSpinning(true);
+        const userData = {
+            name: formData.name,
+            description: formData.description
+        }   
+        try {
+            const response = await axios.post('http://localhost:5000/api/v1/category/new', userData, {
+                withCredentials: true,
+            });
+            alert(response.data.message);
+            setOpenAddModal(false);
+            window.location.reload();      
+        } catch (error) {
+            alert(error.response.data.message);
+            if (error.response && error.response.status === 401){
+                homePage();
+            };
+
+        } finally {
+            setIsSpinning(false);
+        }
+    };
+
+
+    /**
+     * This calls the API for updating user's category
+     * @param {Object} formData 
+     */
+    const handleSubmitUpdatCategory = async (formData) => {
+        setIsSpinning(true);
+        const userData = {
+            name: formData.name,
+            description: formData.description
+        }
+        const idx = updateItem.index;
+
+        try {
+            const response = await axios.put(`http://localhost:5000/api/v1/category/edit/${idx}`, userData, {
+                withCredentials: true,
+            });
+            alert(response.data.message);
+            setOpenUpdateModal(false);
+            window.location.reload();       
+        } catch (error) {
+            alert(error.response.data.message);
+            if (error.response && error.response.status === 401){
+                homePage();
+            };
+        } finally {
+            setIsSpinning(false);
+        }
+      
+    };
+
+
+     /**
+     * This calls the API for deleting user's category
+     */
+    const handleSubmitDeleteCategory = async (row) => {
+        setIsSpinning(true);
+        const idx = deletedItem.index;
+        try {
+            const response = await axios.delete(`http://localhost:5000/api/v1/category/delete/${idx}`, {
+                withCredentials: true,
+            });
+            alert(response.data.message);
+            setOpenDeleteModal(false);
+            window.location.reload();
+        } catch (error) {
+            alert(error.response.data.message);
+            if (error.response && error.response.status === 401){
+                alert(error.response.data.message);
+                homePage();
+            };
+        } finally {
+            setIsSpinning(false);
+        }
+    };
+
+    // The table's column
     const columns = [
         {
-            accessorKey: 'categoryName', //access nested data with dot notation
+            accessorKey: 'name', //access nested data with dot notation
             header: 'Category',
             size: 100,
         },
@@ -49,7 +180,7 @@ export const CategoryPage = () => {
             Cell: ({ row }) => (
                 <div className="flex gap-3">
                     <button
-                        onClick={() => handleEdit(row)}
+                        onClick={() => selectUpdateCategory(row)}
                         style={{ marginRight: '8px' }}
                         className="w-[100%] justify-center rounded-md border border-transparent
              bg-blue-500 px-4 py-1 text-lg font-bold text-white
@@ -59,7 +190,7 @@ export const CategoryPage = () => {
                         Edit
                     </button>
                     <button
-                        onClick={() => handleDelete(row)}
+                        onClick={() => SelectDeleteCategory(row)}
                         className="w-[100%] justify-center rounded-md border border-transparent
              bg-red-500 px-4 py-1 text-lg font-bold text-white hover:bg-red-300 hover:text-red-900 
               focus:outline-none focus-visible:ring-2
@@ -79,18 +210,53 @@ export const CategoryPage = () => {
                 catalogName="Manage Category"
                 addButton={true}
                 title="Add New Category"
+                onClickAdd={() => setOpenAddModal(true)}
             >
                 {!loading ? (
                     <Table
                         data={category}
-                        onEdit={handleEdit}
-                        onDelete={handleDelete}
+                        onEdit={handleSubmitUpdatCategory}
+                        onDelete={handleSubmitDeleteCategory}
                         columns={columns}
                     />
                 ) : (
                     <TableSkeletonLoader />
                 )}
             </Catalog>
+            {openAddModal && (
+                <AddCategoryModal
+                    isOpen={openAddModal}
+                    closeModal={() => {
+                        setOpenAddModal(false);
+                        setInitialFormValues(null);
+                    }}
+                    spinner={isSpinning && <Spinner/>}
+                    onSubmit={handleSubmitAddCategory}
+                />
+            )}
+            {openUpdateModal && (
+                <UpdateCategoryModal
+                    isOpen={openUpdateModal}
+                    closeModal={() => {
+                        setOpenUpdateModal(false);
+                        setInitialFormValues(null);
+                    }}
+                    spinner={isSpinning && <Spinner/>}
+                    initialFormValues={initialFormValues}
+                    onSubmit={handleSubmitUpdatCategory}
+                />
+            )}
+            {openDeleteModal && (
+                <DeleteCategoryModal
+                    isOpen={openDeleteModal}
+                    closeModal={() => {
+                        setOpenDeleteModal(false);
+                        setDeletedItem(null);
+                    }}
+                    spinner={isSpinning && <Spinner/>}
+                    onConfirm={() => handleSubmitDeleteCategory(deletedItem)}
+                />
+            )}
         </main>
     );
 };

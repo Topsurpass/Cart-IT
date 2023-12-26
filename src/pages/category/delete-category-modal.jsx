@@ -4,7 +4,7 @@ import { ButtonModal } from '@/components/ui/ButtonModal';
 import { HeaderModal } from '@/components/ui/HeaderModal';
 
 
-export const DeleteProductModal = ({
+export const DeleteCategoryModal = ({
     isOpen,
     closeModal,
     onConfirm,
@@ -12,11 +12,13 @@ export const DeleteProductModal = ({
 }) => {
 
     /**
-     * Call the function when 'YES' is selected to delete a product
+     * It gets called when the submit button is clicked
+     * @param {Object} data 
      */
-    const deleteProduct = async () => {
+
+    const deleteCategory= async (data) => {
         if (onConfirm) {
-            await onConfirm();
+            await onConfirm(data);
         }
     };
 
@@ -28,14 +30,14 @@ export const DeleteProductModal = ({
                     title="Product deleted cannot be restored"
                 />
             </div>
-            <h2 className="mt-5 text-center">
-                The selected product will be deleted
+            <h2 className="mt-5 text-center ">
+                This category and all its products will be deleted
             </h2>
             <div className="mt-10 flex gap-5">
                 <ButtonModal title="Cancel" btnFunction={closeModal} />
                 <ButtonModal
                     title="Delete"
-                    btnFunction={deleteProduct}
+                    btnFunction={deleteCategory}
                     addCol="w-[100%] justify-center rounded-md border border-transparent
              bg-red-500 px-4 py-2 text-lg font-bold text-white
               hover:bg-red-400 hover:text-white-900 focus:outline-none focus-visible:ring-2

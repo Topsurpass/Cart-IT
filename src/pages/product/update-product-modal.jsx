@@ -13,9 +13,8 @@ export const UpdateProductModal = ({
     closeModal,
     onSubmit,
     initialFormValues,
+    spinner
 }) => {
-    const navigate = useNavigate();
-    const productPage = () => navigate('/dashboard/products');
     const {
         register,
         handleSubmit,
@@ -25,8 +24,10 @@ export const UpdateProductModal = ({
         formState: { errors },
     } = useForm({ defaultValues: initialFormValues });
 
+    /**
+     * Use useEffect to update form values when initialFormValues change
+     */
     useEffect(() => {
-        // Use useEffect to update form values when initialFormValues change
         if (initialFormValues) {
             Object.entries(initialFormValues).forEach(([key, value]) => {
                 setValue(key, value);
@@ -34,18 +35,10 @@ export const UpdateProductModal = ({
         }
     }, [initialFormValues, setValue]);
 
-    const submitForm = async () => {
+    const submitForm = async (data) => {
         if (onSubmit) {
-            try {
-                // Make  API call for adding new product N.B onAdd is an async fxn append await to it
-                await onSubmit();
-                reset();
-                closeModal();
-                productPage();
-            } catch (error) {
-                // Handle API submission error
-                console.error('Error adding product:', error);
-            }
+            await onSubmit(data);
+            reset();
         }
     };
 
@@ -113,6 +106,7 @@ export const UpdateProductModal = ({
                 <div className="mt-4">
                     <ButtonModal title="Update Product" />
                 </div>
+                {spinner}
             </form>
         </MyModal>
     );
