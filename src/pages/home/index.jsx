@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Hero from '@/components/features/Hero';
 import Sale from '@/components/features/Sale';
 import Catalog from '@/components/features/Catalog';
@@ -8,56 +8,23 @@ import { LoginModal } from '@/pages/home/login-modal';
 import { RegisterModal } from '@/pages/home/register-modal';
 import { ViewProduct } from '@/pages/home/view-product-details';
 import { DefaultResponsiveNav } from '@/layout/DefaultResponsiveNav';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+
 
 export const HomePage = () => {
     const [openLoginModal, setOpenLoginModal] = useState(false);
     const [openRegisterModal, setopenRegisterModal] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [isItemSelected, setIsSelectedItem] = useState(false);
-    const navigate = useNavigate();
-    // const dashBoardPage = () => navigate('/dashboard');
 
-    const handleCloseLoginModal = () => {
-        setOpenLoginModal(false);
-    };
-    const handleCloseRegisterModal = () => setopenRegisterModal(false);
-    const handleCloseViewProductModal = () => setIsSelectedItem(false);
 
+    /**
+     * Select item to perform operations on
+     * @param {Object} item 
+     */
     const handleSelectItem = (item) => {
         setIsSelectedItem(true);
         setSelectedItem(item);
     };
-
-    // useEffect(() => {
-    //     const checkUserProfile = async () => {
-    //         try {
-    //             // Make a GET request to your API endpoint
-    //             const response = await axios.get(
-    //                 'http://localhost:5000/api/v1/auth/profile',
-    //                 {
-    //                     withCredentials: true, // Include credentials (cookies) in the request
-    //                     headers: {
-    //                         'Content-Type': 'application/json',
-    //                     },
-    //                 }
-    //             );
-
-    //             if (response.status === 200) {
-    //                 alert(response.data.message);
-    //                 setOpenLoginModal(false);
-    //                 dashBoardPage();
-    //             }
-    //         } catch (error) {
-    //             // Handle API error
-    //             alert(error);
-    //             setOpenLoginModal(true);
-    //         }
-    //     };
-
-    //     checkUserProfile();
-    // }, []);
 
     return (
         <main className="px-5">
@@ -112,25 +79,25 @@ export const HomePage = () => {
             <Pagination />
             <LoginModal
                 isOpen={openLoginModal}
-                closeModal={handleCloseLoginModal}
+                closeModal={() => setOpenLoginModal(false)}
                 onSignup={() => {
-                    handleCloseLoginModal();
+                    setOpenLoginModal(false);
                     setopenRegisterModal(true);
                 }}
             />
             <RegisterModal
                 isOpen={openRegisterModal}
-                closeModal={handleCloseRegisterModal}
+                closeModal={()=> setopenRegisterModal(false)}
                 nowLogin={() => setOpenLoginModal(true)}
                 onSignin={() => {
-                    handleCloseRegisterModal();
+                    setopenRegisterModal(false);
                     setOpenLoginModal(true);
                 }}
             ></RegisterModal>
             {isItemSelected && (
                 <ViewProduct
                     isOpen={isItemSelected}
-                    closeModal={handleCloseViewProductModal}
+                    closeModal={()=> setIsSelectedItem(false)}
                     item={selectedItem}
                 />
             )}

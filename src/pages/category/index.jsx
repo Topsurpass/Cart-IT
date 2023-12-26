@@ -1,13 +1,16 @@
 import { ResponsiveUserAuthNav } from '@/layout/ResponsiveUserAuthNav';
 import Catalog from '@/components/features/Catalog';
 import Table from '@/components/features/Table';
-import categoryData from '@/utils/data/categoryData';
 import { useState, useEffect } from 'react';
 import TableSkeletonLoader from '@/components/ui/TableSkeletonLoaded';
 import { AddCategoryModal } from '@/pages/category/add-category-modal';
 import { UpdateCategoryModal } from '@/pages/category/update-category-modal';
 import { DeleteCategoryModal } from '@/pages/category/delete-category-modal';
 import Spinner from '@/components/ui/Spinner';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+
 
 export const CategoryPage = () => {
     const [category, setCategory] = useState([]);
@@ -20,19 +23,42 @@ export const CategoryPage = () => {
     const [updateItem, setUpdateItem] = useState(null);
     const [deletedItem, setDeletedItem] = useState(null);
 
-    // Fake api call to list all category of a user
-    // http://localhost:5000/api/v1/category/all
+    const navigate = useNavigate();
+    const homePage = () => navigate('/');
+
+     /**
+     * Get all category stored in database for a particular merchat / user
+     */
     useEffect(() => {
-        setTimeout(() => {
-            setCategory(categoryData);
-            setLoading(false); // Set loading to false after the data is fetched
-        }, 5000);
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api/v1/category/all', {
+                    withCredentials: true,
+                });
+                setCategory(response.data);          
+                
+            } catch (error) {
+                alert(error.response.data.error);
+                if (error.response && error.response.status === 401){                    
+                    homePage();
+                };    
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
     }, []);
 
+
+     /**
+     * Select table row to update.
+     * Extract data from the row and initialize the form fields with it
+     * @param {Table row} row 
+     */
+
     const selectUpdateCategory = (row) => {
-        // Selectt category to update and pre-filled all input fields
         const initialValues = {
-            name: row.original.categoryName,
+            name: row.original.name,
             description: row.original.description,
         };
         setInitialFormValues(initialValues);
@@ -40,75 +66,105 @@ export const CategoryPage = () => {
         setUpdateItem(row);
     };
 
+    /**
+     * Select table row to delete
+     * @param {Table row} row 
+     */
     const SelectDeleteCategory = (row) => {
         setOpenDeleteModal(true);
         setDeletedItem(row);
     };
 
+
+    /**
+     * This calls the API for adding new category
+     * Form to be set to the server
+     * @param {Object} formData 
+     */
     const handleSubmitAddCategory= async (formData) => {
-        // This calls the API for user add product
-        //http//localhost:5000/api/v1/category/new POST
         setIsSpinning(true);
-        setTimeout(() => {
-            try {
-                // Make your API request here using formData
-                // Example: await api/category/add(formData);
-                alert('New category added:', formData);
-                setOpenAddModal(false);
-            } catch (error) {
-                // Handle API error
-                console.error('API request failed:', error);
-            } finally {
-                setIsSpinning(false);
-            }
-        }, 2000);
-        
-    };
+        const userData = {
+            name: formData.name,
+            description: formData.description
+        }   
+        try {
+            const response = await axios.post('http://localhost:5000/api/v1/category/new', userData, {
+                withCredentials: true,
+            });
+            alert(response.data.message);
+            setOpenAddModal(false);
+            window.location.reload();      
+        } catch (error) {
+            alert(error.response.data.message);
+            if (error.response && error.response.status === 401){
+                homePage();
+            };
 
-    const handleSubmitUpdatCategory = async () => {
-        // This calls the API for user update category
-        //http//localhost:5000/api/v1/category/edit/index PUT
-        setIsSpinning(true);
-        setTimeout(() => {
-            try {
-                // Make your API request here using formData
-                alert('Category Updated:', updateItem);
-                setOpenUpdateModal(false);
-                
-            } catch (error) {
-                // Handle API error
-                console.error('API request failed:', error);
-            } finally {
-                setIsSpinning(false);
-            }
-        }, 2000);
-        
-    };
-
-    const handleSubmitDeleteCategory = (row) => {
-        // Api call to delete the row
-        // http://localhost:5000/api/v1/category/delete/index
-        setIsSpinning(true);
-        setTimeout(() => {
-            try {
-                // Make your API request here using formData
-                alert(
-                    `${row.original.categoryName} category of index ${row.index} deleted`
-                );
-                setOpenDeleteModal(false);
-            } catch (error) {
-                // Handle API error
-                console.error('API request failed:', error);
-            } finally {
-                setIsSpinning(false);
-            }
-        }, 2000);
+        } finally {
+            setIsSpinning(false);
+        }
     };
 
 
+    /**
+     * This calls the API for updating user's category
+     * @param {Object} formData 
+     */
+    const handleSubmitUpdatCategory = async (formData) => {
+        setIsSpinning(true);
+        const userData = {
+            name: formData.name,
+            description: formData.description
+        }
+        const idx = updateItem.index;
+
+        try {
+            const response = await axios.put(`http://localhost:5000/api/v1/category/edit/${idx}`, userData, {
+                withCredentials: true,
+            });
+            alert(response.data.message);
+            setOpenUpdateModal(false);
+            window.location.reload();       
+        } catch (error) {
+            alert(error.response.data.message);
+            if (error.response && error.response.status === 401){
+                homePage();
+            };
+        } finally {
+            setIsSpinning(false);
+        }
+      
+    };
+
+
+     /**
+     * This calls the API for deleting user's category
+     */
+    const handleSubmitDeleteCategory = async (row) => {
+        setIsSpinning(true);
+        const idx = deletedItem.index;
+        try {
+            const response = await axios.delete(`http://localhost:5000/api/v1/category/delete/${idx}`, {
+                withCredentials: true,
+            });
+            alert(response.data.message);
+            setOpenDeleteModal(false);
+            window.location.reload();
+        } catch (error) {
+            alert(error.response.data.message);
+            if (error.response && error.response.status === 401){
+                alert(error.response.data.message);
+                homePage();
+            };
+        } finally {
+            setIsSpinning(false);
+        }
+    };
+
+    // The table's column
     const columns = [
         {
-            accessorKey: 'categoryName', //access nested data with dot notation
+            accessorKey: 'name', //access nested data with dot notation
             header: 'Category',
             size: 100,
         },

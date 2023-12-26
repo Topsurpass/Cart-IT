@@ -35,11 +35,11 @@ export const UpdateCategoryModal = ({
         }
     }, [initialFormValues, setValue]);
 
-    const submitForm = async () => {
+    const submitForm = async (data) => {
         if (onSubmit) {
             try {
                 // Make  API call for adding new product N.B onAdd is an async fxn append await to it
-                await onSubmit();
+                await onSubmit(data);
                 categoryPage();
             } catch (error) {
                 // Handle API submission error

@@ -2,7 +2,6 @@ import React from 'react';
 import MyModal from '@/components/ui/Modal';
 import { ButtonModal } from '@/components/ui/ButtonModal';
 import { HeaderModal } from '@/components/ui/HeaderModal';
-import { useNavigate } from 'react-router-dom';
 
 
 export const DeleteProductModal = ({
@@ -11,19 +10,13 @@ export const DeleteProductModal = ({
     onConfirm,
     spinner
 }) => {
-    const navigate = useNavigate();
-    const productPage = () => navigate('/dashboard/products');
 
-    const deleteProduct = async (data) => {
+    /**
+     * Call the function when 'YES' is selected to delete a product
+     */
+    const deleteProduct = async () => {
         if (onConfirm) {
-            try {
-                // Make  API call for adding new product N.B onAdd is an async fxn append await to it
-                await onConfirm(data);
-                productPage();
-            } catch (error) {
-                // Handle API submission error
-                console.error('Error adding product:', error);
-            }
+            await onConfirm();
         }
     };
 
@@ -35,13 +28,13 @@ export const DeleteProductModal = ({
                     title="Product deleted cannot be restored"
                 />
             </div>
-            <h2 className="mt-5 text-center text-xl font-bold">
-                Are you sure you want to delete this product ?{' '}
+            <h2 className="mt-5 text-center">
+                The selected product will be deleted
             </h2>
             <div className="mt-10 flex gap-5">
-                <ButtonModal title="No" btnFunction={closeModal} />
+                <ButtonModal title="Cancel" btnFunction={closeModal} />
                 <ButtonModal
-                    title="Yes"
+                    title="Delete"
                     btnFunction={deleteProduct}
                     addCol="w-[100%] justify-center rounded-md border border-transparent
              bg-red-500 px-4 py-2 text-lg font-bold text-white

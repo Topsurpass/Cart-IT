@@ -4,7 +4,6 @@ import MyModal from '@/components/ui/Modal';
 import { FormInput } from '@/components/features/FormInput';
 import { ButtonModal } from '@/components/ui/ButtonModal';
 import { HeaderModal } from '@/components/ui/HeaderModal';
-import { useNavigate } from 'react-router-dom';
 import { SelectModal } from '@/components/ui/SelectModal';
 
 
@@ -14,28 +13,21 @@ export const AddProductModal = ({
     onSubmit,
     spinner
 }) => {
-    const navigate = useNavigate();
-    const productPage = () => navigate('/dashboard/products');
     const {
         register,
         handleSubmit,
-        reset,
         control,
         formState: { errors },
     } = useForm();
     
 
+    /**
+     * The function gets called when the form is submitted
+     * @param {Object} data 
+     */
     const submitForm = async (data) => {
         if (onSubmit) {
-            try {
-                // Make  API call for adding new product N.B onSubmit is an async fxn append await to it
-                await onSubmit(data);
-                reset();
-                productPage();
-            } catch (error) {
-                // Handle API submission error
-                console.error('Error adding product:', error);
-            }
+            await onSubmit(data);
         }
     };
 
