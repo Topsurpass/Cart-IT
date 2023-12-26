@@ -1,12 +1,12 @@
 import { useState, Fragment, useEffect } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { Controller } from 'react-hook-form'; 
-import categoryData from '@/utils/data/categoryData';
 import { Check } from 'lucide-react';
 import axios from 'axios';
 
 export const SelectModal = ({ control, name}) => {
     const [selectedCategory, setSelectedCategory] = useState([]);
+    const [categoryData, setCategoryData] = useState([]);
 
     useEffect(()=>{
         const fetchData = async () =>{
@@ -14,7 +14,8 @@ export const SelectModal = ({ control, name}) => {
                 const response = await axios.get('http://localhost:5000/api/v1/category/all', {
                     withCredentials: true,
                 });
-                setSelectedCategory(response.data);          
+                setSelectedCategory(response.data);
+                setCategoryData(response.data);         
                 
             } catch (error) {
                 alert(error.response.data.message);
@@ -34,7 +35,6 @@ export const SelectModal = ({ control, name}) => {
             <Controller
                 name={name}
                 control={control}
-                defaultValue={selectedCategory}
                 render={({ field }) => (
                     <Listbox
                         value={field.value}
@@ -44,9 +44,9 @@ export const SelectModal = ({ control, name}) => {
                         }}
                     >
                         <div className="relative mt-1">
-                            <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+                            <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm h-[40px]">
                                 <span className="block truncate">
-                                    {selectedCategory.categoryName}
+                                    {selectedCategory.name}
                                 </span>
                                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                     <Check
@@ -61,10 +61,10 @@ export const SelectModal = ({ control, name}) => {
                                 leaveFrom="opacity-100"
                                 leaveTo="opacity-0"
                             >
-                                <Listbox.Options className="mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
-                                    {categoryData.map((category) => (
+                                <Listbox.Options className="mt-1 max-h-70 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+                                    {categoryData.map((category, idx) => (
                                         <Listbox.Option
-                                            key={category.id}
+                                            key={idx}
                                             className={({ active }) =>
                                                 `relative cursor-default select-none py-2 pl-10 pr-4 ${
                                                     active
@@ -83,7 +83,7 @@ export const SelectModal = ({ control, name}) => {
                                                                 : 'font-normal'
                                                         }`}
                                                     >
-                                                        {category.categoryName}
+                                                        {category.name}
                                                     </span>
                                                     {selected ? (
                                                         <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">

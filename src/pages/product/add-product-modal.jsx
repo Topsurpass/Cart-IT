@@ -16,7 +16,6 @@ export const AddProductModal = ({
     const {
         register,
         handleSubmit,
-        reset,
         control,
         formState: { errors },
     } = useForm();
@@ -29,7 +28,6 @@ export const AddProductModal = ({
     const submitForm = async (data) => {
         if (onSubmit) {
             await onSubmit(data);
-            reset();
         }
     };
 

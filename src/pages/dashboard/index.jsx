@@ -53,25 +53,26 @@ export const DashBoard = () => {
         <main className="px-5">
             <ResponsiveUserAuthNav/>
             <Catalog catalogName="Product Catalog">
-                <div className="mt-5 w-[100%] md:flex md:flex-wrap md:justify-between">
+                <div className="mt-5 w-[100%] md:flex md:flex-wrap md:justify-left md:gap-5">
                     {!loading ? (
                         catalogProducts.map((item, idx) => {
                             return (
                                 <div
                                 key={item._id.$oid}
                                 onClick={() => handleSelectItem(item)}
-                                className='w-full flex-col rounded-md border-2 bg-white p-1 drop-shadow-lg
+                                className='w-full flex-col rounded-md border-2 bg-white p-1 drop-shadow-lg mb-3 md:mb-0
                                 hover:cursor-pointer hover:border-2 hover:border-sky-500 hover:shadow-lg hover:shadow-slate-600 md:w-[22.5%]'
                             >
                                 <img
                                     src={item.image_url}
                                     alt={item.name}
-                                    className="mb-3 w-full"
+                                    className="mb-3 w-full h-[75%]"
                                 />
-                                <div className="w-full">
-                                    {item.description}
+                                <div className="w-full h-[20%]">
+                                    <p>{item.name}</p>
+                                    <p className="font-bold ">{`$${item.price}`}</p>
                                 </div>
-                                <p className="font-bold ">{item.price}</p>
+                                
                             </div>);
                         })
                     ) : (

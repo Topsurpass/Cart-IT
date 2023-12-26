@@ -89,7 +89,7 @@ export const ProductPage = () => {
             name: formData.name,
             image_url: formData.image_url,
             description: formData.description,
-            category: formData.category['categoryName'],
+            category: formData.category.name,
             price: formData.price,
             quantity: formData.quantity
         }
@@ -120,7 +120,7 @@ export const ProductPage = () => {
             name: formData.name,
             image_url: formData.image_url,
             description: formData.description,
-            category: formData.category['categoryName'],
+            category: formData.category.name,
             price: formData.price,
             quantity: formData.quantity
         }
@@ -178,6 +178,11 @@ export const ProductPage = () => {
             accessorKey: 'description',
             header: 'Description',
             size: 400,
+        },
+        {
+            accessorKey: 'category',
+            header: 'Category',
+            size: 100,
         },
         {
             accessorKey: 'price',
