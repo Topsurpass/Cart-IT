@@ -12,7 +12,7 @@ const Table = ({ data, columns, onEdit, onDelete }) => {
     const table = useMaterialReactTable({
         columns: tableColumns,
         data,
-        enableColumnFilters: false,
+        enableColumnFilters: true,
         enableSorting: false,
         initialState: {
             pagination: { pageSize: 5, pageIndex: 0 },

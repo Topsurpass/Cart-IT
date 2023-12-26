@@ -20,52 +20,40 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
         formState: { errors },
     } = useForm();
 
-    //  Api call to register new merchant
+    /**
+     * Make API call to the server to register new merchant or user
+     * @param {Object} formData 
+     */
     const submitForm = (formData) => {
-        // const requestData = {
-        //     merchant: formData.merchant,
-        //     email: formData.email,
-        //     username: formData.username,
-        //     password: formData.password,
-        //     phone: formData.phone,
-        //     address: formData.address,
-        // };
-        // setIsLoading(true);
-        // axios
-        //     .post('http://localhost:5000/api/v1/auth/signup', requestData, {
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //     })
-        //     .then((response) => {
-        //         alert(response.data.message);
-        //         reset();
-        //         closeModal();
-        //         nowLogin();
-        //     })
-        //     .catch((error) => {
-        //         // Handle API error
-        //         alert(error.response.data.message);
-        //         homePage();
-        //     })
-        //     .finally(() => {
-        //         setIsLoading(false);
-        //     });
+        const requestData = {
+            merchant: formData.merchant,
+            email: formData.email,
+            username: formData.username,
+            password: formData.password,
+            phone: formData.phone,
+            address: formData.address,
+        };
         setIsLoading(true);
-        setTimeout(() => {          
-            try {
-                alert('Sigup successfully');          
+        axios
+            .post('http://localhost:5000/api/v1/auth/signup', requestData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then((response) => {
+                alert(response.data.message);
                 reset();
                 closeModal();
                 nowLogin();
-            } catch (error) {
-                alert(error);
-            } finally {
+            })
+            .catch((error) => {
+                // Handle API error
+                alert(error.response.data.message);
+                homePage();
+            })
+            .finally(() => {
                 setIsLoading(false);
-            }
-            
-            // setLoading(false); // Set loading to false after the data is fetched
-        }, 2000);
+            });
     };
 
     return (
@@ -137,6 +125,7 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
                     <FormInput
                         labelName="Phone"
                         icon="*"
+                        placeholder= "08012345678"
                         validation={register('phone', {
                             required: true,
                             pattern: {

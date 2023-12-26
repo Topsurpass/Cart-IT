@@ -4,7 +4,6 @@ import MyModal from '@/components/ui/Modal';
 import { FormInput } from '@/components/features/FormInput';
 import { ButtonModal } from '@/components/ui/ButtonModal';
 import { HeaderModal } from '@/components/ui/HeaderModal';
-import { useNavigate } from 'react-router-dom';
 
 
 
@@ -14,8 +13,6 @@ export const AddCategoryModal = ({
     onSubmit,
     spinner
 }) => {
-    const navigate = useNavigate();
-    const categoryPage = () => navigate('/dashboard/category');
     const {
         register,
         handleSubmit,
@@ -23,16 +20,13 @@ export const AddCategoryModal = ({
     } = useForm();
     
 
+    /**
+     * The function gets called when the submit button is clicked
+     * @param {Object} data 
+     */
     const submitForm = async (data) => {
         if (onSubmit) {
-            try {
-                // Make  API call for adding new product N.B onAdd is an async fxn append await to it
-                await onSubmit(data);
-                categoryPage();
-            } catch (error) {
-                // Handle API submission error
-                console.error('Error adding product:', error);
-            }
+            await onSubmit(data);
         }
     };
 

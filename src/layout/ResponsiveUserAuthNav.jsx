@@ -7,6 +7,7 @@ import { User } from 'lucide-react';
 export const ResponsiveUserAuthNav = ({home}) => {
     const [isMobileNav, setIsMobileNav] = useState(false);
 
+
     // Toggle nav bar for responsivesness
     useEffect(() => {
         const handleResize = () => {
@@ -20,6 +21,9 @@ export const ResponsiveUserAuthNav = ({home}) => {
         };
     }, []);
 
+    
+
+    
     return (
         <main className="px-5">
             {isMobileNav ? (
