@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Nav from '@/components/features/Nav';
 
 export const DefaultResponsiveNav = ({ openLogin, openReg, home }) => {
-    const [isMobileNav, setIsMobileNav] = useState(false);
+    const [isMobileNav, setIsMobileNav] = useState(window.innerWidth <= 768);
 
     // Toggle nav bar for responsivesness
     useEffect(() => {

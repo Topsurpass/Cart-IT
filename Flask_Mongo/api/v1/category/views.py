@@ -38,7 +38,7 @@ def add_category():
 
 @app_category.route('/edit/<int:index>', methods=['PUT'], strict_slashes=False)
 def edit_category(index: int):
-    """Edit category of a product by index"""
+    """Edit category of a product by index and update all the products category name"""
     data = request.get_json()
     name = data.get('name')
     description = data.get('description')
@@ -55,7 +55,7 @@ def edit_category(index: int):
         '_id': 1,
         'merchant_id': 1,
         'name': 1,
-        'description': 1
+        'description': 1,
     }
     category_list = CATEGORY_db.find_all_merchant({'merchant_id': merchant['_id']}, projection)
     if index < 0 or index >= len(category_list):
@@ -71,12 +71,13 @@ def edit_category(index: int):
         {'_id': _id},
         {'name': name, 'description': description}
     )
+    product_list = PRODUCT_db.update_all_merchant({'category_id': _id}, {'category': name})
     return jsonify(message='Category updated successfully'),200
 
 
 @app_category.route('/delete/<int:index>', methods=['DELETE'], strict_slashes=False)
 def delete_category(index: int):
-    """Delete a category of a product by index"""
+    """Delete a category of product by index and delete all products under it"""
     session_id = request.cookies.get('session_id')
     if not session_id:
         abort(401)

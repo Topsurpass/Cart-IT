@@ -10,15 +10,15 @@ const routeConfig = [
     },
     {
         path: '/dashboard/category',
-        element: <CategoryPage />,
+        element: <CategoryPage />
     },
     {
         path: '/dashboard/products',
-        element: <ProductPage />,
+        element: <ProductPage />
     },
     {
         path: '/dashboard',
-        element: <DashBoard/>
+        element: <DashBoard />
     }
 ];
 
