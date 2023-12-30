@@ -41,14 +41,15 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
                 },
             })
             .then((response) => {
-                alert(response.data.message);
+                // alert(response.data.message);
+                alert(response.data.message)
                 reset();
                 closeModal();
                 nowLogin();
             })
             .catch((error) => {
                 // Handle API error
-                alert(error.response.data.message);
+                alert(error.message);
                 homePage();
             })
             .finally(() => {
@@ -94,7 +95,7 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
                             maxLength: 30,
                         })}
                         errMessaage="Minimum of 6 and max of 30 letters"
-                        error={errors.fullname}
+                        error={errors.merchant}
                     />
                     <FormInput
                         labelName="Username"

@@ -20,7 +20,7 @@ export const FormInput = ({
             <label className="font-bold">
                 {labelName} <span className="text-red-500">{icon}</span>
             </label>
-            <input {...inputProps} placeholder={placeholder}></input>
+            <input {...inputProps} placeholder={placeholder} autoComplete='true'></input>
             {error && <span className="text-red-500 text-xs">{errMessaage}</span>}
         </div>
     );

@@ -13,6 +13,7 @@ export const LoginModal = ({ isOpen, closeModal, onSignup }) => {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const dashboardPage = () => navigate('/dashboard');
+    const homePage = () => navigate('/');
 
     const {
         register,
@@ -43,7 +44,9 @@ export const LoginModal = ({ isOpen, closeModal, onSignup }) => {
             })
             .catch((error) => {
                 // Handle API error
-                alert(error.response.data.message);
+                alert(error.message);
+                homePage();
+                // alert(error.response.data.message);
             })
             .finally(() => {
                 setIsLoading(false);

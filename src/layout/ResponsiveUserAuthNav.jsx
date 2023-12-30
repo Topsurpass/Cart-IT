@@ -3,13 +3,17 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Nav from '@/components/features/Nav';
 import { User } from 'lucide-react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export const ResponsiveUserAuthNav = ({home}) => {
-    const [isMobileNav, setIsMobileNav] = useState(false);
-
+    const [isMobileNav, setIsMobileNav] = useState(window.innerWidth <= 768);
+    
+    const navigate = useNavigate();
 
     // Toggle nav bar for responsivesness
     useEffect(() => {
+        
         const handleResize = () => {
             setIsMobileNav(window.innerWidth <= 768);
         };
@@ -22,6 +26,19 @@ export const ResponsiveUserAuthNav = ({home}) => {
     }, []);
 
     
+    // Logout user
+    const handleLogout = async () =>{
+        try{
+            await axios.delete('http://localhost:5000/api/v1/auth/logout', {
+                withCredentials: true,
+            });
+        } catch (error) {
+            alert(error.message);
+        } finally{
+            navigate('/');
+        }
+        
+    }
 
     
     return (
@@ -39,11 +56,11 @@ export const ResponsiveUserAuthNav = ({home}) => {
                             to="/dashboard/category"
                             className="h-10 rounded-md border-b-2 p-2 hover:bg-blue-200"
                         >
-                            Category
+                            Manage Category
                         </Link>
-                        <Link className="h-10 rounded-md border-b-2 p-2 hover:bg-blue-200">
+                        <div className="h-10 rounded-md border-b-2 p-2 hover:bg-blue-200 cursor-pointer" onClick={handleLogout}>
                             Logout
-                        </Link>
+                        </div>
                     </div>
                 </MobilNav>
             ) : (
@@ -60,9 +77,16 @@ export const ResponsiveUserAuthNav = ({home}) => {
                                 to="/dashboard/category"
                                 className=" text-lg text-blue-500 md:hover:underline"
                             >
-                                Category
+                                Manage Category
                             </Link>
-                            <User className="ml-10 h-8 w-8 rounded-[50%] bg-blue-500 text-white" />
+                            <div className='flex justify-center self-center gap-2'>
+                                <User className="ml-10 h-8 w-8 rounded-[50%] bg-blue-500 text-white" />
+                                <span className='text-blue-500 text-center flex justify-center self-center'>Welcome</span>
+                            </div>
+                            
+                            <button className="h-10 rounded-md border-b-2 p-2 bg-blue-500 hover:bg-blue-200 cursor-pointer" onClick={handleLogout}>
+                                Logout
+                            </button>
                         </div>
                     </div>
                 </Nav>

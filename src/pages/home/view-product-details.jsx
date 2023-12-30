@@ -22,12 +22,9 @@ export const ViewProduct = ({ isOpen, closeModal, item }) => {
                             <div className="rounded-md bg-slate-200 p-1">
                                 Category A
                             </div>
-                            <div className="rounded-md bg-slate-200 p-1">
-                                Category B
-                            </div>
                         </div>
-                        <p className="text-2xl font-bold text-black">
-                            {item.price}
+                        <p className="text-lg font-bold text-black">
+                            ${item.price}
                         </p>
                     </div>
                 </div>
@@ -41,10 +38,10 @@ export const ViewProduct = ({ isOpen, closeModal, item }) => {
                     <h2 className="w-full border-b-2 text-left text-lg font-semibold">
                         Seller Information
                     </h2>
-                    <h2 className="text-xl font-bold">{item.seller}</h2>
+                    <h2 className="font-bold">{item.seller}</h2>
 
                     <div className="flex gap-10">
-                        <li className="pl-5">{item.phone}</li>
+                        <p className="pl-5">{item.phone}</p>
                         <p>{item.address}</p>
                     </div>       
                 </div>

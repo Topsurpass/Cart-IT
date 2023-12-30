@@ -22,9 +22,10 @@ export const CategoryPage = () => {
     const [initialFormValues, setInitialFormValues] = useState(null);
     const [updateItem, setUpdateItem] = useState(null);
     const [deletedItem, setDeletedItem] = useState(null);
+    const [isAuthorized, setIsAuthorized] = useState(true);
+    const [isPageReady, setIsPageReady] = useState(false);
 
     const navigate = useNavigate();
-    const homePage = () => navigate('/');
 
      /**
      * Get all category stored in database for a particular merchat / user
@@ -38,17 +39,23 @@ export const CategoryPage = () => {
                 setCategory(response.data);          
                 
             } catch (error) {
-                alert(error.response.data.error);
-                if (error.response && error.response.status === 401){                    
-                    homePage();
-                };    
+                if (error.response && (error.response.status === 401 || error.response.status === 403)){   
+                    setIsAuthorized(false);
+                    // alert(error.response.data.error);
+                }; 
+                              
             } finally {
                 setLoading(false);
+                setIsPageReady(true);
             }
         };
         fetchData();
     }, []);
 
+    if (!isAuthorized) {
+        navigate('/');
+        return null; // Render nothing if not authorized
+    }
 
      /**
      * Select table row to update.
@@ -96,8 +103,8 @@ export const CategoryPage = () => {
             window.location.reload();      
         } catch (error) {
             alert(error.response.data.message);
-            if (error.response && error.response.status === 401){
-                homePage();
+            if (error.response && (error.response.status === 401 || error.response.status === 403)){
+                navigate('/');
             };
 
         } finally {
@@ -127,8 +134,8 @@ export const CategoryPage = () => {
             window.location.reload();       
         } catch (error) {
             alert(error.response.data.message);
-            if (error.response && error.response.status === 401){
-                homePage();
+            if (error.response && (error.response.status === 401 || error.response.status === 403)){
+                navigate('/');
             };
         } finally {
             setIsSpinning(false);
@@ -152,14 +159,15 @@ export const CategoryPage = () => {
             window.location.reload();
         } catch (error) {
             alert(error.response.data.message);
-            if (error.response && error.response.status === 401){
+            if (error.response && (error.response.status === 401 || error.response.status === 403)){
                 alert(error.response.data.message);
-                homePage();
+                navigate('/');
             };
         } finally {
             setIsSpinning(false);
         }
     };
+  
 
     // The table's column
     const columns = [
@@ -205,7 +213,7 @@ export const CategoryPage = () => {
 
     return (
         <main className="px-5">
-            <ResponsiveUserAuthNav home="/dashboard" />
+            <ResponsiveUserAuthNav home="/dashboard"/>
             <Catalog
                 catalogName="Manage Category"
                 addButton={true}
