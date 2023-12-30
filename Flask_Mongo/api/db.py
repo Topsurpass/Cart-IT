@@ -4,24 +4,20 @@ from bson import json_util
 from pymongo import MongoClient
 from typing import Dict, Any, List, Union
 from urllib.parse import quote_plus
+from dotenv import load_dotenv
 import json
 import os
 
-# host = os.getenv("API_HOST", "localhost")
-# port = os.getenv("API_PORT", 27017)
 
+load_dotenv()
 
 class DB:
     """The mongo db database where our data are saved"""
 
     def __init__(self, db: str, collection: str) -> None:
         """Initialize the database instance"""
-        # self.client = MongoClient(host, port)
-        # self.db = self.client[db]
-        # self.collection = self.db[collection]
-
-        username = 'temitopeabiodun685'
-        password = 'Temitope@12'
+        username = os.getenv("USER_NAME")
+        password = os.getenv("PASS_WORD")
         cluster_url = 'cluster0.bumxezy.mongodb.net'
         
         # Properly escape username and password
@@ -37,12 +33,6 @@ class DB:
         # Access the specified database and collection
         self.db = self.client[db]
         self.collection = self.db[collection]
-
-
-
-
-
-
 
     def insert_merchant(self, data: Dict[str, Any]) -> Any:
         """Insert new data into the db and return its ID"""
@@ -64,6 +54,11 @@ class DB:
     
     def update_merchant(self, query: Dict[str, Any], update_data: Dict[str, Any]) -> bool:
         """Update a document in the collection based document id"""
+        result = self.collection.update_one(query, {'$set': update_data})
+        return result
+
+    def update_all_merchant(self, query: Dict[str, Any], update_data: Dict[str, Any]) -> bool:
+        """Update all documents in a collection based document id"""
         result = self.collection.update_one(query, {'$set': update_data})
         return result
     
