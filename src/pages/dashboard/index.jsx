@@ -12,8 +12,11 @@ export const DashBoard = () => {
     const [isItemSelected, setIsSelectedItem] = useState(false);
     const [catalogProducts, setCatalogProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isAuthorized, setIsAuthorized] = useState(true);
+    const [isPageReady, setIsPageReady] = useState(false);
+
+
     const navigate = useNavigate();
-    const homePage = () => navigate('/');
 
    /**
      * Get all category stored in database for a particular merchat / user and
@@ -21,25 +24,29 @@ export const DashBoard = () => {
      */
     useEffect(() => {
         const fetchData = async () => {
-        try {
-            const response = await axios.get('http://localhost:5000/api/v1/product/all', {
-                withCredentials: true, 
-            });
-            setCatalogProducts(response.data);
-        } catch (error){
-            alert(error.response.data.error);    
-            if (error.response && error.response.status === 401){
-                homePage();
-            }  
-        } finally {
-            setLoading(false);
-        }
-    };
-    fetchData();  
+            try {
+                const response = await axios.get('http://localhost:5000/api/v1/product/all', {
+                    withCredentials: true, 
+                });
+                setCatalogProducts(response.data);
+            } catch (error){  
+                if (error.response && (error.response.status === 401 || error.response.status === 403)){
+                    setIsAuthorized(false);
+                }  
+            } finally {
+                setLoading(false);
+                setIsPageReady(true);
+            }
+        };
+        fetchData();  
 
     }, []);
-
     
+
+    if (!isAuthorized) {
+        navigate('/');
+        return null; // Render nothing if not authorized
+    }
     /**
      * Select item to view
      * @param {Object} item 
@@ -52,7 +59,7 @@ export const DashBoard = () => {
     return (
         <main className="px-5">
             <ResponsiveUserAuthNav/>
-            <Catalog catalogName="Product Catalog">
+            <Catalog catalogName="Dashboard">
                 <div className="mt-5 w-[100%] md:flex md:flex-wrap md:justify-left md:gap-5">
                     {!loading ? (
                         catalogProducts.map((item, idx) => {

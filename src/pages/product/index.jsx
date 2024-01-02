@@ -22,15 +22,12 @@ export const ProductPage = () => {
     const [updateItem, setUpdateItem] = useState(null);
     const [initialFormValues, setInitialFormValues] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [isAuthorized, setIsAuthorized] = useState(true);
+    const [isPageReady, setIsPageReady] = useState(false);
 
     const navigate = useNavigate();
-    const homePage = () => navigate('/');
 
 
-
-    /**
-     * Get all products stored in database for a particular merchat / user
-     */
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -38,17 +35,26 @@ export const ProductPage = () => {
                     withCredentials: true,
                 });
                 setCatalogProducts(response.data);          
-                setLoading(false);
+                
             } catch (error) {
-                alert(error.response.data.error);
-                if (error.response && error.response.status === 401){
-                    homePage();
-                };             
+                if (error.response && (error.response.status === 401 || error.response.status === 403)){   
+                    setIsAuthorized(false);
+                    // alert(error.response.data.error);
+                }; 
+                              
+            } finally {
+                setLoading(false);
+                setIsPageReady(true);
             }
         };
         fetchData();
     }, []);
-    
+
+    if (!isAuthorized) {
+        navigate('/');
+        return null; // Render nothing if not authorized
+    }
+ 
     /**
      * Select table row to update.
      * Extract data from the row and initialize the form fields with it
@@ -102,8 +108,8 @@ export const ProductPage = () => {
             window.location.reload();  
         } catch (error) {
             alert(error.response.data.message);
-            if (error.response && error.response.status === 401){
-                homePage();
+            if (error.response && (error.response.status === 401 || error.response.status === 403)){
+                navigate('/');
             };
         } finally {
             setIsLoading(false);
@@ -134,8 +140,8 @@ export const ProductPage = () => {
             window.location.reload();  
         } catch (error) {
             alert(error.response.data.message);
-            if (error.response && error.response.status === 401){
-                homePage();
+            if (error.response && (error.response.status === 401 || error.response.status === 403)){
+                navigate('/');
             };
         } finally {
             setIsLoading(false);
@@ -158,9 +164,9 @@ export const ProductPage = () => {
             window.location.reload();
         } catch (error) {
             alert(error.response.data.message);
-            if (error.response && error.response.status === 401){
+            if (error.response && (error.response.status === 401 || error.response.status === 403)){
                 alert(error.response.data.message);
-                homePage();
+                navigate('/');
             }
         } finally {
             setIsLoading(false);
