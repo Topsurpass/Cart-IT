@@ -120,3 +120,32 @@ This will list all category of products created by a merchant
 ```
 curl -X GET -b 'session_id=yoursessionid' http://localhost:5000/api/v1/category/all
 ```
+
+## Test cases
+
+The project uses Jest and React Testing Library for efficient React application testing with a user-centric approach. The test cases are written in the `testcases` folder.
+
+### Change directory to the project folder:
+    
+```
+cd Cartit\src\testcases
+```
+
+### Install dependencies:
+```
+npm install
+```
+
+### Run test cases:
+```
+npx jest
+```
+### Run test cases with coverage:
+```
+npx jest 
+```
+
+### To run a specific test file, you can provide the path to the file as an argument:
+```
+npx jest path/to/the/test/file.test.js
+```
