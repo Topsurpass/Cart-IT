@@ -7,6 +7,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import Spinner from '@/components/ui/Spinner';
 import { useNavigate } from 'react-router-dom';
+import apiBaseUrl from '@/api/baseUrl';
+
 
 export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -35,7 +37,7 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
         };
         setIsLoading(true);
         axios
-            .post('http://localhost:5000/api/v1/auth/signup', requestData, {
+            .post(`${apiBaseUrl}/auth/signup`, requestData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },

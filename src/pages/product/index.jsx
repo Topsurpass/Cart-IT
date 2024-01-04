@@ -9,6 +9,7 @@ import { UpdateProductModal } from './update-product-modal';
 import { DeleteProductModal } from './delete-product-modal';
 import Spinner from '@/components/ui/Spinner';
 import { useNavigate } from 'react-router-dom';
+import apiBaseUrl from '@/api/baseUrl';
 
 
 
@@ -31,7 +32,7 @@ export const ProductPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/v1/product/all', {
+                const response = await axios.get(`${apiBaseUrl}/product/all`, {
                     withCredentials: true,
                 });
                 setCatalogProducts(response.data);          
@@ -39,7 +40,6 @@ export const ProductPage = () => {
             } catch (error) {
                 if (error.response && (error.response.status === 401 || error.response.status === 403)){   
                     setIsAuthorized(false);
-                    // alert(error.response.data.error);
                 }; 
                               
             } finally {
@@ -100,7 +100,7 @@ export const ProductPage = () => {
             quantity: formData.quantity
         }
         try {
-            const response = await axios.post('http://localhost:5000/api/v1/product/new', userData, {
+            const response = await axios.post(`${apiBaseUrl}/product/new`, userData, {
                 withCredentials: true,
             });
             alert(response.data.message);
@@ -132,7 +132,7 @@ export const ProductPage = () => {
         }
         const idx = initialFormValues.index;
         try {
-            const response = await axios.put(`http://localhost:5000/api/v1/product/edit/${idx}`, userData, {
+            const response = await axios.put(`${apiBaseUrl}/product/edit/${idx}`, userData, {
                 withCredentials: true,
             });
             alert(response.data.message);
@@ -156,7 +156,7 @@ export const ProductPage = () => {
         setIsLoading(true);
         const idx = deletedItem.index;
         try {
-            const response = await axios.delete(`http://localhost:5000/api/v1/product/delete/${idx}`, {
+            const response = await axios.delete(`${apiBaseUrl}/product/delete/${idx}`, {
                 withCredentials: true,
             });
             alert(response.data.message);
