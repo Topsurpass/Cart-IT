@@ -6,6 +6,8 @@ import SkeletonLoader from '@/components/ui/SkeletonLoader';
 import { ResponsiveUserAuthNav } from '@/layout/ResponsiveUserAuthNav';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import apiBaseUrl from '@/api/baseUrl';
+
 
 export const DashBoard = () => {
     const [selectedItem, setSelectedItem] = useState(null);
@@ -25,7 +27,7 @@ export const DashBoard = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/v1/product/all', {
+                const response = await axios.get(`${apiBaseUrl}/product/all`, {
                     withCredentials: true, 
                 });
                 setCatalogProducts(response.data);

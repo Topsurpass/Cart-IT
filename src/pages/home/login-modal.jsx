@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Spinner from '@/components/ui/Spinner';
 import axios from 'axios';
+import apiBaseUrl from '@/api/baseUrl';
+
 
 export const LoginModal = ({ isOpen, closeModal, onSignup }) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -30,7 +32,7 @@ export const LoginModal = ({ isOpen, closeModal, onSignup }) => {
         };
         setIsLoading(true);
         axios
-            .post('http://localhost:5000/api/v1/auth/login', requestData, {
+            .post(`${apiBaseUrl}/auth/login`, requestData, {
                 withCredentials: true,
                 headers: {
                     'Content-Type': 'application/json',

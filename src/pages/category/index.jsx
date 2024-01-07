@@ -9,6 +9,7 @@ import { DeleteCategoryModal } from '@/pages/category/delete-category-modal';
 import Spinner from '@/components/ui/Spinner';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import apiBaseUrl from '@/api/baseUrl';
 
 
 
@@ -33,7 +34,7 @@ export const CategoryPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/v1/category/all', {
+                const response = await axios.get(`${apiBaseUrl}/category/all`, {
                     withCredentials: true,
                 });
                 setCategory(response.data);          
@@ -95,7 +96,7 @@ export const CategoryPage = () => {
             description: formData.description
         }   
         try {
-            const response = await axios.post('http://localhost:5000/api/v1/category/new', userData, {
+            const response = await axios.post(`${apiBaseUrl}/category/new`, userData, {
                 withCredentials: true,
             });
             alert(response.data.message);
@@ -126,7 +127,7 @@ export const CategoryPage = () => {
         const idx = updateItem.index;
 
         try {
-            const response = await axios.put(`http://localhost:5000/api/v1/category/edit/${idx}`, userData, {
+            const response = await axios.put(`${apiBaseUrl}/category/edit/${idx}`, userData, {
                 withCredentials: true,
             });
             alert(response.data.message);
@@ -151,7 +152,7 @@ export const CategoryPage = () => {
         setIsSpinning(true);
         const idx = deletedItem.index;
         try {
-            const response = await axios.delete(`http://localhost:5000/api/v1/category/delete/${idx}`, {
+            const response = await axios.delete(`${apiBaseUrl}/category/delete/${idx}`, {
                 withCredentials: true,
             });
             alert(response.data.message);
