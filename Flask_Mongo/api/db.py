@@ -21,8 +21,8 @@ class DB:
         cluster_url = 'cluster0.bumxezy.mongodb.net'
         
         # Properly escape username and password
-        escaped_username = quote_plus(username)
-        escaped_password = quote_plus(password)
+        escaped_username = quote_plus(username.encode('utf-8'))
+        escaped_password = quote_plus(password.encode('utf-8'))
         
         # Construct the MongoDB connection string
         mongo_url = f'mongodb+srv://{escaped_username}:{escaped_password}@{cluster_url}/?retryWrites=true&w=majority'
