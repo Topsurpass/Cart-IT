@@ -45,10 +45,8 @@ export const LoginModal = ({ isOpen, closeModal, onSignup }) => {
                 dashboardPage();
             })
             .catch((error) => {
-                // Handle API error
-                alert(error.message);
+                alert(error.response.data.message);
                 homePage();
-                // alert(error.response.data.message);
             })
             .finally(() => {
                 setIsLoading(false);

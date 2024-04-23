@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
 import Catalog from '@/components/features/Catalog';
-import Pagination from '@/components/features/Pagination';
 import { ViewProduct } from '@/pages/home/view-product-details';
 import SkeletonLoader from '@/components/ui/SkeletonLoader';
-import { ResponsiveUserAuthNav } from '@/layout/ResponsiveUserAuthNav';
+import { Layout } from './layout';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import apiBaseUrl from '@/api/baseUrl';
-
 
 export const DashBoard = () => {
     const [selectedItem, setSelectedItem] = useState(null);
@@ -15,12 +13,11 @@ export const DashBoard = () => {
     const [catalogProducts, setCatalogProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isAuthorized, setIsAuthorized] = useState(true);
-    const [isPageReady, setIsPageReady] = useState(false);
-
+    // const [isPageReady, setIsPageReady] = useState(false);
 
     const navigate = useNavigate();
 
-   /**
+    /**
      * Get all category stored in database for a particular merchat / user and
      * display in dashboard
      */
@@ -28,22 +25,24 @@ export const DashBoard = () => {
         const fetchData = async () => {
             try {
                 const response = await axios.get(`${apiBaseUrl}/product/all`, {
-                    withCredentials: true, 
+                    withCredentials: true,
                 });
                 setCatalogProducts(response.data);
-            } catch (error){  
-                if (error.response && (error.response.status === 401 || error.response.status === 403)){
+            } catch (error) {
+                if (
+                    error.response &&
+                    (error.response.status === 401 ||
+                        error.response.status === 403)
+                ) {
                     setIsAuthorized(false);
-                }  
+                }
             } finally {
                 setLoading(false);
-                setIsPageReady(true);
+                // setIsPageReady(true);
             }
         };
-        fetchData();  
-
+        fetchData();
     }, []);
-    
 
     if (!isAuthorized) {
         navigate('/');
@@ -51,7 +50,7 @@ export const DashBoard = () => {
     }
     /**
      * Select item to view
-     * @param {Object} item 
+     * @param {Object} item
      */
     const handleSelectItem = (item) => {
         setIsSelectedItem(true);
@@ -59,47 +58,48 @@ export const DashBoard = () => {
     };
 
     return (
-        <main className="px-5">
-            <ResponsiveUserAuthNav/>
-            <Catalog catalogName="Dashboard">
-                <div className="mt-5 w-[100%] md:flex md:flex-wrap md:justify-left md:gap-5">
-                    {!loading ? (
+        <Layout>
+            <Catalog>
+                <div className="grid gap-2 md:grid-cols-4">
+                    {catalogProducts.length === 0 ? (
+                        <div className="col-span-4 flex w-full items-center justify-center h-[200px] border-dashed border-2 rounded-md">
+                            <p>No product available</p>
+                        </div>
+                    ) : !loading ? (
                         catalogProducts.map((item, idx) => {
                             return (
                                 <div
-                                key={item._id.$oid}
-                                onClick={() => handleSelectItem(item)}
-                                className='w-full flex-col rounded-md border-2 bg-white p-1 drop-shadow-lg mb-3 md:mb-0
-                                hover:cursor-pointer hover:border-2 hover:border-sky-500 hover:shadow-lg hover:shadow-slate-600 md:w-[22.5%]'
-                            >
-                                <img
-                                    src={item.image_url}
-                                    alt={item.name}
-                                    className="mb-3 w-full h-[75%]"
-                                />
-                                <div className="w-full h-[20%]">
-                                    <p>{item.name}</p>
-                                    <p className="font-bold ">{`$${item.price}`}</p>
+                                    key={item._id.$oid}
+                                    onClick={() => handleSelectItem(item)}
+                                    className="flex cursor-pointer flex-col items-center justify-center rounded-md border bg-white p-3 drop-shadow-lg hover:border-sky-500 hover:shadow-lg hover:shadow-slate-600"
+                                >
+                                    <img
+                                        src={item.image_url}
+                                        alt={item.name}
+                                        className="h-[70%] w-full"
+                                    />
+                                    <div className="h-[20%] w-full">
+                                        <p>{item.name}</p>
+                                        <p className="font-bold">{`$${item.price}`}</p>
+                                    </div>
                                 </div>
-                                
-                            </div>);
+                            );
                         })
                     ) : (
-                        <div className="flex h-full w-full items-center justify-center">
+                        <div className="col-span-4 flex w-full items-center justify-center">
                             <SkeletonLoader />
                         </div>
                     )}
                 </div>
             </Catalog>
-            <Pagination />
 
             {isItemSelected && (
                 <ViewProduct
                     isOpen={isItemSelected}
-                    closeModal={()=>setIsSelectedItem(false)}
+                    closeModal={() => setIsSelectedItem(false)}
                     item={selectedItem}
                 />
             )}
-        </main>
+        </Layout>
     );
 };

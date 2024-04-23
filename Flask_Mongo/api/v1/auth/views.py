@@ -38,8 +38,8 @@ def registerMerchant():
 
 @app_auth.route("/login", methods=['POST'], strict_slashes=False)
 def loginMerchant():
-    data = request.get_json()
     """Login merchant, create token and redirect to /profile"""
+    data = request.get_json()
     email = data.get('email').lower()
     password = data.get('password')
 

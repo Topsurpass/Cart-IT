@@ -1,4 +1,4 @@
-import { ResponsiveUserAuthNav } from '@/layout/ResponsiveUserAuthNav';
+// import { ResponsiveUserAuthNav } from '@/layout/ResponsiveUserAuthNav';
 import Catalog from '@/components/features/Catalog';
 import Table from '@/components/features/Table';
 import axios from 'axios';
@@ -10,8 +10,7 @@ import { DeleteProductModal } from './delete-product-modal';
 import Spinner from '@/components/ui/Spinner';
 import { useNavigate } from 'react-router-dom';
 import apiBaseUrl from '@/api/baseUrl';
-
-
+import { Layout } from '../dashboard/layout';
 
 export const ProductPage = () => {
     const [catalogProducts, setCatalogProducts] = useState([]);
@@ -28,20 +27,21 @@ export const ProductPage = () => {
 
     const navigate = useNavigate();
 
-
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get(`${apiBaseUrl}/product/all`, {
                     withCredentials: true,
                 });
-                setCatalogProducts(response.data);          
-                
+                setCatalogProducts(response.data);
             } catch (error) {
-                if (error.response && (error.response.status === 401 || error.response.status === 403)){   
+                if (
+                    error.response &&
+                    (error.response.status === 401 ||
+                        error.response.status === 403)
+                ) {
                     setIsAuthorized(false);
-                }; 
-                              
+                }
             } finally {
                 setLoading(false);
                 setIsPageReady(true);
@@ -54,13 +54,13 @@ export const ProductPage = () => {
         navigate('/');
         return null; // Render nothing if not authorized
     }
- 
+
     /**
      * Select table row to update.
      * Extract data from the row and initialize the form fields with it
-     * @param {Table row} row 
+     * @param {Table row} row
      */
- 
+
     const selectUpdateProduct = (row) => {
         const initialValues = {
             name: row.original.name,
@@ -77,17 +77,17 @@ export const ProductPage = () => {
 
     /**
      * Select table row to delete
-     * @param {Table row} row 
+     * @param {Table row} row
      */
     const SelectDeleteProduct = (row) => {
         setOpenDeleteModal(true);
         setDeletedItem(row);
     };
-    
+
     /**
      * This calls the API for adding new product
      * Form to be set to the server
-     * @param {Object} formData 
+     * @param {Object} formData
      */
     const handleSubmitAddProduct = async (formData) => {
         setIsLoading(true);
@@ -97,20 +97,27 @@ export const ProductPage = () => {
             description: formData.description,
             category: formData.category.name,
             price: formData.price,
-            quantity: formData.quantity
-        }
+            quantity: formData.quantity,
+        };
         try {
-            const response = await axios.post(`${apiBaseUrl}/product/new`, userData, {
-                withCredentials: true,
-            });
+            const response = await axios.post(
+                `${apiBaseUrl}/product/new`,
+                userData,
+                {
+                    withCredentials: true,
+                }
+            );
             alert(response.data.message);
             setOpenAddModal(false);
-            window.location.reload();  
+            window.location.reload();
         } catch (error) {
             alert(error.response.data.message);
-            if (error.response && (error.response.status === 401 || error.response.status === 403)){
+            if (
+                error.response &&
+                (error.response.status === 401 || error.response.status === 403)
+            ) {
                 navigate('/');
-            };
+            }
         } finally {
             setIsLoading(false);
         }
@@ -118,7 +125,7 @@ export const ProductPage = () => {
 
     /**
      * This calls the API for updating user's product
-     * @param {Object} formData 
+     * @param {Object} formData
      */
     const handleSubmitUpdateProduct = async (formData) => {
         setIsLoading(true);
@@ -128,21 +135,28 @@ export const ProductPage = () => {
             description: formData.description,
             category: formData.category.name,
             price: formData.price,
-            quantity: formData.quantity
-        }
+            quantity: formData.quantity,
+        };
         const idx = initialFormValues.index;
         try {
-            const response = await axios.put(`${apiBaseUrl}/product/edit/${idx}`, userData, {
-                withCredentials: true,
-            });
+            const response = await axios.put(
+                `${apiBaseUrl}/product/edit/${idx}`,
+                userData,
+                {
+                    withCredentials: true,
+                }
+            );
             alert(response.data.message);
             setOpenUpdateModal(false);
-            window.location.reload();  
+            window.location.reload();
         } catch (error) {
             alert(error.response.data.message);
-            if (error.response && (error.response.status === 401 || error.response.status === 403)){
+            if (
+                error.response &&
+                (error.response.status === 401 || error.response.status === 403)
+            ) {
                 navigate('/');
-            };
+            }
         } finally {
             setIsLoading(false);
         }
@@ -151,20 +165,26 @@ export const ProductPage = () => {
     /**
      * This calls the API for deleting user's product
      */
-    
+
     const handleSubmitDeleteProduct = async () => {
         setIsLoading(true);
         const idx = deletedItem.index;
         try {
-            const response = await axios.delete(`${apiBaseUrl}/product/delete/${idx}`, {
-                withCredentials: true,
-            });
+            const response = await axios.delete(
+                `${apiBaseUrl}/product/delete/${idx}`,
+                {
+                    withCredentials: true,
+                }
+            );
             alert(response.data.message);
             setOpenDeleteModal(false);
             window.location.reload();
         } catch (error) {
             alert(error.response.data.message);
-            if (error.response && (error.response.status === 401 || error.response.status === 403)){
+            if (
+                error.response &&
+                (error.response.status === 401 || error.response.status === 403)
+            ) {
                 alert(error.response.data.message);
                 navigate('/');
             }
@@ -231,10 +251,8 @@ export const ProductPage = () => {
     ];
 
     return (
-        <main className="px-5">
-            <ResponsiveUserAuthNav home="/dashboard" />
+        <Layout>
             <Catalog
-                catalogName="Manage Products"
                 addButton={true}
                 title="Add New Product"
                 onClickAdd={() => setOpenAddModal(true)}
@@ -258,7 +276,7 @@ export const ProductPage = () => {
                         setInitialFormValues(null);
                     }}
                     onSubmit={handleSubmitAddProduct}
-                    spinner={isLoading && <Spinner/>}
+                    spinner={isLoading && <Spinner />}
                 />
             )}
             {openUpdateModal && (
@@ -269,7 +287,7 @@ export const ProductPage = () => {
                         setInitialFormValues(null);
                     }}
                     initialFormValues={initialFormValues}
-                    spinner = {isLoading && <Spinner/>}
+                    spinner={isLoading && <Spinner />}
                     onSubmit={handleSubmitUpdateProduct}
                 />
             )}
@@ -280,10 +298,10 @@ export const ProductPage = () => {
                         setOpenDeleteModal(false);
                         setDeletedItem(null);
                     }}
-                    spinner = {isLoading && <Spinner/>}
+                    spinner={isLoading && <Spinner />}
                     onConfirm={() => handleSubmitDeleteProduct(deletedItem)}
                 />
             )}
-        </main>
+        </Layout>
     );
 };

@@ -2,7 +2,6 @@ import React from 'react';
 import { ArrowDownUp, ChevronDown } from 'lucide-react';
 
 const Catalog = ({
-    catalogName,
     children,
     showIcons,
     addButton,
@@ -10,14 +9,8 @@ const Catalog = ({
     onClickAdd,
 }) => {
     return (
-        <div>
-            <div className="mt-[100px] flex justify-between border-b-2 border-sky-500 pb-1">
-                <div
-                    className="text-center text-lg font-bold md:text-left md:text-lg"
-                    autoCapitalize="characters"
-                >
-                    {catalogName}
-                </div>
+        <div className="mt-3 h-screen w-full">
+            <div className="mt-[75px] flex justify-between">
                 {showIcons && (
                     <div className="flex w-40 md:mt-0">
                         <div className="flex w-20 cursor-pointer">
@@ -31,10 +24,10 @@ const Catalog = ({
                     </div>
                 )}
                 {addButton && (
-                    <div className="flex w-[150px] md:mt-0">
+                    <div className="flex w-full justify-end md:mt-0">
                         <button
                             onClick={onClickAdd}
-                            className="hover:text-black-900 h-10 w-[100%] justify-center rounded-md border
+                            className="hover:text-black-900 h-10 w-[150px]  justify-center rounded-md border
              border-transparent bg-blue-500  text-sm text-white hover:bg-blue-300 
               focus:outline-none focus-visible:ring-2
                focus-visible:ring-blue-500 focus-visible:ring-offset-2 "

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import Hero from '@/components/features/Hero';
 import Sale from '@/components/features/Sale';
 import Catalog from '@/components/features/Catalog';
-import Pagination from '@/components/features/Pagination';
 import catalogProducts from '@/utils/data/catalog';
 import { LoginModal } from '@/pages/home/login-modal';
 import { RegisterModal } from '@/pages/home/register-modal';
@@ -76,7 +75,6 @@ export const HomePage = () => {
                     })}
                 </div>
             </Catalog>
-            <Pagination />
             <LoginModal
                 isOpen={openLoginModal}
                 closeModal={() => setOpenLoginModal(false)}

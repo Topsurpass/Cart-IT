@@ -1,4 +1,3 @@
-import { ResponsiveUserAuthNav } from '@/layout/ResponsiveUserAuthNav';
 import Catalog from '@/components/features/Catalog';
 import Table from '@/components/features/Table';
 import { useState, useEffect } from 'react';
@@ -10,6 +9,7 @@ import Spinner from '@/components/ui/Spinner';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import apiBaseUrl from '@/api/baseUrl';
+import { Layout } from '../dashboard/layout';
 
 
 
@@ -213,8 +213,7 @@ export const CategoryPage = () => {
     ];
 
     return (
-        <main className="px-5">
-            <ResponsiveUserAuthNav home="/dashboard"/>
+        <Layout>
             <Catalog
                 catalogName="Manage Category"
                 addButton={true}
@@ -266,6 +265,6 @@ export const CategoryPage = () => {
                     onConfirm={() => handleSubmitDeleteCategory(deletedItem)}
                 />
             )}
-        </main>
+        </Layout>
     );
 };

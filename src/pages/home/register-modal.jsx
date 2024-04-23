@@ -9,7 +9,6 @@ import Spinner from '@/components/ui/Spinner';
 import { useNavigate } from 'react-router-dom';
 import apiBaseUrl from '@/api/baseUrl';
 
-
 export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
@@ -24,7 +23,7 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
 
     /**
      * Make API call to the server to register new merchant or user
-     * @param {Object} formData 
+     * @param {Object} formData
      */
     const submitForm = (formData) => {
         const requestData = {
@@ -43,15 +42,13 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
                 },
             })
             .then((response) => {
-                // alert(response.data.message);
-                alert(response.data.message)
+                alert(response.data.message);
                 reset();
                 closeModal();
                 nowLogin();
             })
             .catch((error) => {
-                // Handle API error
-                alert(error.message);
+                alert(error.response.data.message);
                 homePage();
             })
             .finally(() => {
@@ -128,7 +125,7 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
                     <FormInput
                         labelName="Phone"
                         icon="*"
-                        placeholder= "08012345678"
+                        placeholder="08012345678"
                         validation={register('phone', {
                             required: true,
                             pattern: {
