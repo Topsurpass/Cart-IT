@@ -1,16 +1,18 @@
 import { useForm } from 'react-hook-form';
 import MyModal from '@/components/ui/Modal';
-import { ButtonModal } from '@/components/ui/ButtonModal';
+import LoadButton from '@/components/ui/ButtonLoading';
 import { FormInput } from '@/components/features/FormInput';
+import { toast } from 'sonner';
 import { HeaderModal } from '@/components/ui/HeaderModal';
 import { useState } from 'react';
 import axios from 'axios';
-import Spinner from '@/components/ui/Spinner';
+
 import { useNavigate } from 'react-router-dom';
 import apiBaseUrl from '@/api/baseUrl';
 
 export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
     const navigate = useNavigate();
     const homePage = () => navigate('/');
 
@@ -35,20 +37,21 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
             address: formData.address,
         };
         setIsLoading(true);
+        setError('');
         axios
             .post(`${apiBaseUrl}/auth/signup`, requestData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             })
-            .then((response) => {
-                alert(response.data.message);
+            .then(() => {            
                 reset();
                 closeModal();
                 nowLogin();
+                toast('Account created successfully.');
             })
             .catch((error) => {
-                alert(error.response.data.message);
+                setError(error.response.data.message);
                 homePage();
             })
             .finally(() => {
@@ -148,9 +151,21 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
                         errMessaage="Minimum of 10 characters"
                         error={errors.address}
                     />
-
+                    <p className="text-sm text-red-500">{error}</p>
                     <div className="mt-4">
-                        <ButtonModal title="Create Account" />
+                        <LoadButton
+                            type="submit"
+                            variant="primary"
+                            title="Create Account"
+                            size="sm"
+                            fullWidth={true}
+                            className=" `w-[100%] group relative flex items-center justify-center self-center rounded-md border border-transparent
+             bg-blue-500 px-4 py-2 text-lg font-bold text-white
+              hover:bg-blue-200 hover:text-blue-900 focus:outline-none focus-visible:ring-2
+               focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                            isLoading={isLoading}
+                            loadingText="Please Wait..."
+                        />
                     </div>
                     <p className="mt-3 text-center text-sm" onClick={onSignin}>
                         Already have an account ?{' '}
@@ -163,7 +178,6 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
                     </p>
                 </form>
             </div>
-            {isLoading && <Spinner />}
         </MyModal>
     );
 };

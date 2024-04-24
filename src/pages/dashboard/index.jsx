@@ -13,7 +13,7 @@ export const DashBoard = () => {
     const [catalogProducts, setCatalogProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isAuthorized, setIsAuthorized] = useState(true);
-    // const [isPageReady, setIsPageReady] = useState(false);
+
 
     const navigate = useNavigate();
 
@@ -60,9 +60,9 @@ export const DashBoard = () => {
     return (
         <Layout>
             <Catalog>
-                <div className="grid gap-2 md:grid-cols-4">
-                    {catalogProducts.length === 0 ? (
-                        <div className="col-span-4 flex w-full items-center justify-center h-[200px] border-dashed border-2 rounded-md">
+                <div className="grid gap-2 md:grid-cols-5">
+                    {!loading && catalogProducts.length === 0 ? (
+                        <div className="col-span-5 flex h-[200px] w-full items-center justify-center rounded-md border-2 border-dashed">
                             <p>No product available</p>
                         </div>
                     ) : !loading ? (
@@ -86,7 +86,7 @@ export const DashBoard = () => {
                             );
                         })
                     ) : (
-                        <div className="col-span-4 flex w-full items-center justify-center">
+                        <div className="col-span-5 flex w-full items-center justify-center">
                             <SkeletonLoader />
                         </div>
                     )}

@@ -12,3 +12,5 @@ export const ButtonModal = ({ title, btnFunction, addCol }) => {
         </button>
     );
 };
+
+

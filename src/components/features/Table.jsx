@@ -1,4 +1,3 @@
-// import { useMemo } from 'react';
 import React from 'react';
 import {
     MaterialReactTable,
