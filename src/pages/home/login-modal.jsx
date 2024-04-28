@@ -89,7 +89,7 @@ export const LoginModal = ({ isOpen, closeModal, onSignup }) => {
                         title="Log in"
                         size="sm"
                         fullWidth={true}
-                        className=" `w-[100%] group relative flex items-center justify-center self-center rounded-md border border-transparent
+                        className="w-[100%] group relative flex items-center justify-center self-center rounded-md border border-transparent
              bg-blue-500 px-4 py-2 text-lg font-bold text-white
               hover:bg-blue-200 hover:text-blue-900 focus:outline-none focus-visible:ring-2
                focus-visible:ring-blue-500 focus-visible:ring-offset-2"

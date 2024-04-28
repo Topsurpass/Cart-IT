@@ -6,7 +6,6 @@ import { toast } from 'sonner';
 import { HeaderModal } from '@/components/ui/HeaderModal';
 import { useState } from 'react';
 import axios from 'axios';
-
 import { useNavigate } from 'react-router-dom';
 import apiBaseUrl from '@/api/baseUrl';
 
@@ -44,7 +43,7 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
                     'Content-Type': 'application/json',
                 },
             })
-            .then(() => {            
+            .then(() => {
                 reset();
                 closeModal();
                 nowLogin();
@@ -60,7 +59,7 @@ export const RegisterModal = ({ isOpen, closeModal, nowLogin, onSignin }) => {
     };
 
     return (
-        <MyModal isOpen={isOpen} closeModal={closeModal} title="">
+        <MyModal isOpen={isOpen} closeModal={closeModal}>
             <div className="flex w-full flex-col justify-center">
                 <HeaderModal
                     closeModal={closeModal}

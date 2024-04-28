@@ -5,18 +5,16 @@ import TableSkeletonLoader from '@/components/ui/TableSkeletonLoaded';
 import { AddCategoryModal } from '@/pages/category/add-category-modal';
 import { UpdateCategoryModal } from '@/pages/category/update-category-modal';
 import { DeleteCategoryModal } from '@/pages/category/delete-category-modal';
-import Spinner from '@/components/ui/Spinner';
+import LoadButton from '@/components/ui/ButtonLoading';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'sonner';
 import apiBaseUrl from '@/api/baseUrl';
 import { Layout } from '../dashboard/layout';
-
-
 
 export const CategoryPage = () => {
     const [category, setCategory] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [isSpinning, setIsSpinning] = useState(false);
     const [openAddModal, setOpenAddModal] = useState(false);
     const [openUpdateModal, setOpenUpdateModal] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -24,11 +22,10 @@ export const CategoryPage = () => {
     const [updateItem, setUpdateItem] = useState(null);
     const [deletedItem, setDeletedItem] = useState(null);
     const [isAuthorized, setIsAuthorized] = useState(true);
-    const [isPageReady, setIsPageReady] = useState(false);
 
     const navigate = useNavigate();
 
-     /**
+    /**
      * Get all category stored in database for a particular merchat / user
      */
     useEffect(() => {
@@ -37,31 +34,37 @@ export const CategoryPage = () => {
                 const response = await axios.get(`${apiBaseUrl}/category/all`, {
                     withCredentials: true,
                 });
-                setCategory(response.data);          
-                
+                setCategory(response.data);
             } catch (error) {
-                if (error.response && (error.response.status === 401 || error.response.status === 403)){   
+                if (
+                    error.response &&
+                    (error.response.status === 401 ||
+                        error.response.status === 403)
+                ) {
                     setIsAuthorized(false);
-                    // alert(error.response.data.error);
-                }; 
-                              
+                }
             } finally {
                 setLoading(false);
-                setIsPageReady(true);
             }
         };
         fetchData();
-    }, []);
+    }, [
+        openAddModal,
+        openUpdateModal,
+        openDeleteModal,
+        deletedItem,
+        updateItem,
+    ]);
 
     if (!isAuthorized) {
         navigate('/');
         return null; // Render nothing if not authorized
     }
 
-     /**
+    /**
      * Select table row to update.
      * Extract data from the row and initialize the form fields with it
-     * @param {Table row} row 
+     * @param {Table row} row
      */
 
     const selectUpdateCategory = (row) => {
@@ -76,99 +79,105 @@ export const CategoryPage = () => {
 
     /**
      * Select table row to delete
-     * @param {Table row} row 
+     * @param {Table row} row
      */
     const SelectDeleteCategory = (row) => {
         setOpenDeleteModal(true);
         setDeletedItem(row);
     };
 
-
     /**
      * This calls the API for adding new category
      * Form to be set to the server
-     * @param {Object} formData 
+     * @param {Object} formData
      */
-    const handleSubmitAddCategory= async (formData) => {
-        setIsSpinning(true);
+    const handleSubmitAddCategory = async (formData) => {
         const userData = {
             name: formData.name,
-            description: formData.description
-        }   
+            description: formData.description,
+        };
         try {
-            const response = await axios.post(`${apiBaseUrl}/category/new`, userData, {
-                withCredentials: true,
-            });
-            alert(response.data.message);
+            const response = await axios.post(
+                `${apiBaseUrl}/category/new`,
+                userData,
+                {
+                    withCredentials: true,
+                }
+            );
+            toast('New category added');
             setOpenAddModal(false);
-            window.location.reload();      
+            setCategory(response.message)
+            
         } catch (error) {
-            alert(error.response.data.message);
-            if (error.response && (error.response.status === 401 || error.response.status === 403)){
+            toast(error.response.data.message);
+            if (
+                error.response &&
+                (error.response.status === 401 || error.response.status === 403)
+            ) {
                 navigate('/');
-            };
-
-        } finally {
-            setIsSpinning(false);
+            }
         }
     };
-
 
     /**
      * This calls the API for updating user's category
-     * @param {Object} formData 
+     * @param {Object} formData
      */
     const handleSubmitUpdatCategory = async (formData) => {
-        setIsSpinning(true);
         const userData = {
             name: formData.name,
-            description: formData.description
-        }
+            description: formData.description,
+        };
         const idx = updateItem.index;
 
         try {
-            const response = await axios.put(`${apiBaseUrl}/category/edit/${idx}`, userData, {
-                withCredentials: true,
-            });
-            alert(response.data.message);
+            const response = await axios.put(
+                `${apiBaseUrl}/category/edit/${idx}`,
+                userData,
+                {
+                    withCredentials: true,
+                }
+            );
+            toast('Category updated successfully');
             setOpenUpdateModal(false);
-            window.location.reload();       
+            setCategory(response.message);
         } catch (error) {
-            alert(error.response.data.message);
-            if (error.response && (error.response.status === 401 || error.response.status === 403)){
+            toast(error.response.data.message);
+            if (
+                error.response &&
+                (error.response.status === 401 || error.response.status === 403)
+            ) {
                 navigate('/');
-            };
-        } finally {
-            setIsSpinning(false);
+            }
         }
-      
     };
 
-
-     /**
+    /**
      * This calls the API for deleting user's category
      */
     const handleSubmitDeleteCategory = async (row) => {
-        setIsSpinning(true);
         const idx = deletedItem.index;
         try {
-            const response = await axios.delete(`${apiBaseUrl}/category/delete/${idx}`, {
-                withCredentials: true,
-            });
-            alert(response.data.message);
+            const response = await axios.delete(
+                `${apiBaseUrl}/category/delete/${idx}`,
+                {
+                    withCredentials: true,
+                }
+            );
+            toast('Category deleted successfully');
             setOpenDeleteModal(false);
-            window.location.reload();
+            setCategory(response.message);
         } catch (error) {
-            alert(error.response.data.message);
-            if (error.response && (error.response.status === 401 || error.response.status === 403)){
-                alert(error.response.data.message);
+            toast(error.response.data.message);
+            if (
+                error.response &&
+                (error.response.status === 401 || error.response.status === 403)
+            ) {
+                toast(error.response.data.message);
                 navigate('/');
-            };
-        } finally {
-            setIsSpinning(false);
+            }
         }
     };
-  
 
     // The table's column
     const columns = [
@@ -188,25 +197,34 @@ export const CategoryPage = () => {
             size: 100,
             Cell: ({ row }) => (
                 <div className="flex gap-3">
-                    <button
-                        onClick={() => selectUpdateCategory(row)}
-                        style={{ marginRight: '8px' }}
+                    <LoadButton
+                        type="submit"
+                        variant="primary"
+                        title={'Edit'}
+                        size="sm"
+                        fullWidth={false}
                         className="w-[100%] justify-center rounded-md border border-transparent
              bg-blue-500 px-4 py-1 text-lg font-bold text-white
               hover:bg-blue-200 hover:text-blue-900 focus:outline-none focus-visible:ring-2
                focus-visible:ring-blue-500 focus-visible:ring-offset-2 "
-                    >
-                        Edit
-                    </button>
-                    <button
-                        onClick={() => SelectDeleteCategory(row)}
+                        isLoading={false}
+                        // loadingText="Loggin out..."
+                        handleClick={() => selectUpdateCategory(row)}
+                    />
+                    <LoadButton
+                        type="submit"
+                        variant="primary"
+                        title={'Delete'}
+                        size="sm"
+                        fullWidth={false}
                         className="w-[100%] justify-center rounded-md border border-transparent
-             bg-red-500 px-4 py-1 text-lg font-bold text-white hover:bg-red-300 hover:text-red-900 
+             bg-red-500 px-4 py-1 text-lg font-bold text-white hover:bg-red-300 hover:text-red-900
               focus:outline-none focus-visible:ring-2
                focus-visible:ring-blue-500 focus-visible:ring-offset-2 "
-                    >
-                        Delete
-                    </button>
+                        isLoading={false}
+                        // loadingText="Loggin out..."
+                        handleClick={() => SelectDeleteCategory(row)}
+                    />
                 </div>
             ),
         },
@@ -215,7 +233,6 @@ export const CategoryPage = () => {
     return (
         <Layout>
             <Catalog
-                catalogName="Manage Category"
                 addButton={true}
                 title="Add New Category"
                 onClickAdd={() => setOpenAddModal(true)}
@@ -238,7 +255,6 @@ export const CategoryPage = () => {
                         setOpenAddModal(false);
                         setInitialFormValues(null);
                     }}
-                    spinner={isSpinning && <Spinner/>}
                     onSubmit={handleSubmitAddCategory}
                 />
             )}
@@ -249,7 +265,6 @@ export const CategoryPage = () => {
                         setOpenUpdateModal(false);
                         setInitialFormValues(null);
                     }}
-                    spinner={isSpinning && <Spinner/>}
                     initialFormValues={initialFormValues}
                     onSubmit={handleSubmitUpdatCategory}
                 />
@@ -261,10 +276,15 @@ export const CategoryPage = () => {
                         setOpenDeleteModal(false);
                         setDeletedItem(null);
                     }}
-                    spinner={isSpinning && <Spinner/>}
                     onConfirm={() => handleSubmitDeleteCategory(deletedItem)}
                 />
             )}
         </Layout>
     );
 };
+
+// export const CategoryPage = () => { 
+//     return (
+//         <p>Category page</p>
+//     )
+// }

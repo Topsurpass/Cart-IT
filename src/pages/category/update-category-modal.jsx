@@ -1,12 +1,11 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import MyModal from '@/components/ui/Modal';
 import { FormInput } from '@/components/features/FormInput';
-import { ButtonModal } from '@/components/ui/ButtonModal';
+import LoadButton from '@/components/ui/ButtonLoading';
 import { HeaderModal } from '@/components/ui/HeaderModal';
-import { useNavigate } from 'react-router-dom';
-
 
 
 export const UpdateCategoryModal = ({
@@ -14,17 +13,14 @@ export const UpdateCategoryModal = ({
     closeModal,
     onSubmit,
     initialFormValues,
-    spinner
 }) => {
-    const navigate = useNavigate();
-    const categoryPage = () => navigate('/dashboard/category');
     const {
         register,
         handleSubmit,
-        control,
         setValue,
         formState: { errors },
     } = useForm({ defaultValues: initialFormValues });
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         // Use useEffect to update form values when initialFormValues change
@@ -38,12 +34,14 @@ export const UpdateCategoryModal = ({
     const submitForm = async (data) => {
         if (onSubmit) {
             try {
+                setIsLoading(true);
                 // Make  API call for adding new product N.B onAdd is an async fxn append await to it
                 await onSubmit(data);
-                categoryPage();
             } catch (error) {
                 // Handle API submission error
-                console.error('Error adding category:', error);
+                toast('Error adding category:', error);
+            } finally {
+                setIsLoading(false);
             }
         }
     };
@@ -74,10 +72,21 @@ export const UpdateCategoryModal = ({
                     error={errors.description}
                 />
                 <div className="mt-4">
-                    <ButtonModal title="Update category" />
+                    <LoadButton
+                        type="submit"
+                        variant="primary"
+                        title="Update category"
+                        size="sm"
+                        fullWidth={true}
+                        className=" `w-[100%] group relative flex items-center justify-center self-center rounded-md border border-transparent
+             bg-blue-500 px-4 py-2 text-lg font-bold text-white
+              hover:bg-blue-200 hover:text-blue-900 focus:outline-none focus-visible:ring-2
+               focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                        isLoading={isLoading}
+                        loadingText="Updating..."
+                    />
                 </div>
             </form>
-            {spinner}
         </MyModal>
     );
 };

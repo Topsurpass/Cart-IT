@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 
-export default function MyModal({ isOpen, closeModal, title, children }) {
+export default function MyModal({ isOpen, closeModal, children }) {
     return (
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog as="div" className="relative z-50" onClose={closeModal}>
@@ -29,14 +29,6 @@ export default function MyModal({ isOpen, closeModal, title, children }) {
                             leaveTo="opacity-0 scale-95"
                         >
                             <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                                {title && (
-                                    <Dialog.Title
-                                        as="h3"
-                                        className="text-lg font-medium leading-6 text-gray-900"
-                                    >
-                                        {title}
-                                    </Dialog.Title>
-                                )}
                                 {children}
                             </Dialog.Panel>
                         </Transition.Child>

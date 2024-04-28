@@ -1,5 +1,4 @@
 import { ResponsiveUserAuthNav } from '@/layout/ResponsiveUserAuthNav';
-import { ShoppingCart, User, LayoutPanelTop, LogOut } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -7,6 +6,8 @@ import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 import LoadButton from '@/components/ui/ButtonLoading';
 import cn from '@/utils/utils';
+import navLinks from '@/utils/data/navLinks';
+
 
 export const Layout = ({ children }) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -20,7 +21,7 @@ export const Layout = ({ children }) => {
             await axios.delete('http://localhost:5000/api/v1/auth/logout', {
                 withCredentials: true,
             });
-            toast('Logged out');
+            toast('Logged out.');
         } catch (error) {
             toast(error.message);
         } finally {
@@ -30,47 +31,28 @@ export const Layout = ({ children }) => {
     };
 
     return (
-        <main className="flex ">
+        <main className="flex overflow-hidden">
             <ResponsiveUserAuthNav home="/dashboard">
                 <div className="flex h-screen w-full flex-col items-center justify-between gap-5 border-r">
                     <div className="mt-5 flex w-full flex-col gap-2">
-                        <div
-                            className={cn(
-                                'justify-left flex h-[50px] items-center border border-r-0 text-lg text-blue-500 hover:bg-blue-300 hover:text-white',
-                                {
-                                    'bg-blue-500 text-white':
-                                        pathname === '/dashboard',
-                                }
-                            )}
-                        >
-                            <User className="ml-10 mr-3" />
-                            <Link to="/dashboard">Dashboard</Link>
-                        </div>
-
-                        <div
-                            className={cn(
-                                'justify-left flex h-[50px] items-center border border-r-0 text-lg text-blue-500 hover:bg-blue-300 hover:text-white',
-                                {
-                                    'bg-blue-500 text-white':
-                                        pathname === '/dashboard/products',
-                                }
-                            )}
-                        >
-                            <ShoppingCart className="ml-10 mr-3" />
-                            <Link to="/dashboard/products">Manage Product</Link>
-                        </div>
-                        <div
-                            className={cn(
-                                'justify-left flex h-[50px] items-center border border-r-0 text-lg text-blue-500 hover:bg-blue-300 hover:text-white',
-                                {
-                                    'bg-blue-500 text-white':
-                                        pathname === '/dashboard/category',
-                                }
-                            )}
-                        >
-                            <LayoutPanelTop className="ml-10 mr-3" />
-                            <Link to="/dashboard/category">Manage Category</Link>
-                        </div>
+                        {
+                            navLinks.map((link, idx) => {
+                                return (
+                                    <div key={idx}
+                                        className={cn(
+                                            'justify-left flex h-[50px] items-center border border-r-0 text-lg text-blue-500 hover:bg-blue-300 hover:text-white',
+                                            {
+                                                'bg-blue-500 text-white':
+                                                    pathname === link.path,
+                                            }
+                                        )}
+                                    >
+                                        <link.icon className='ml-10 mr-3'/>
+                                        <Link to={link.path}>{link.label}</Link>
+                                    </div>
+                                );
+                            })
+                        }
                     </div>
 
                     <LoadButton
@@ -87,7 +69,7 @@ export const Layout = ({ children }) => {
                     />
                 </div>
             </ResponsiveUserAuthNav>
-            <div className="mt-[20px] w-full md:ml-[300px]">{children}</div>
+            <div className="mt-24 w-full md:ml-[300px] overflow-x-scroll">{children}</div>
         </main>
     );
 };

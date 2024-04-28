@@ -4,10 +4,12 @@ import { Link } from 'react-router-dom';
 import Nav from '@/components/features/Nav';
 import { User } from 'lucide-react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 export const ResponsiveUserAuthNav = ({ home, children }) => {
     const [isMobileNav, setIsMobileNav] = useState(window.innerWidth <= 768);
+    const navigate = useNavigate();
 
     // Toggle nav bar for responsivesness
     useEffect(() => {

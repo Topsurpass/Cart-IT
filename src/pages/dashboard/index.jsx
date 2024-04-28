@@ -38,7 +38,6 @@ export const DashBoard = () => {
                 }
             } finally {
                 setLoading(false);
-                // setIsPageReady(true);
             }
         };
         fetchData();
@@ -71,16 +70,18 @@ export const DashBoard = () => {
                                 <div
                                     key={item._id.$oid}
                                     onClick={() => handleSelectItem(item)}
-                                    className="flex cursor-pointer flex-col items-center justify-center rounded-md border bg-white p-3 drop-shadow-lg hover:border-sky-500 hover:shadow-lg hover:shadow-slate-600"
+                                    className="flex h-[300px] cursor-pointer flex-col items-center rounded-md border bg-white p-2 drop-shadow-lg hover:border-sky-500 hover:shadow-lg hover:shadow-slate-600"
                                 >
                                     <img
                                         src={item.image_url}
                                         alt={item.name}
-                                        className="h-[70%] w-full"
+                                        className=" w-full  h-[200px]"
                                     />
-                                    <div className="h-[20%] w-full">
+
+                                    <div className="w-full">
                                         <p>{item.name}</p>
                                         <p className="font-bold">{`$${item.price}`}</p>
+                                        <p className="text-xs">{`${item.quantity} items left`}</p>
                                     </div>
                                 </div>
                             );

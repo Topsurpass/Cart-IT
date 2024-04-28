@@ -14,8 +14,9 @@ export const SelectModal = ({ control, name}) => {
                 const response = await axios.get('http://localhost:5000/api/v1/category/all', {
                     withCredentials: true,
                 });
+                setCategoryData(response.data);  
                 setSelectedCategory(response.data);
-                setCategoryData(response.data);         
+                       
                 
             } catch (error) {
                 alert(error.response.data.message);

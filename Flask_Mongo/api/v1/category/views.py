@@ -33,7 +33,12 @@ def add_category():
         'name': name,
         'description': description
     })
-    return jsonify(message='New category {} added'.format(name)),201
+    projection = {
+        '_id': 0,
+        'merchant_id': 0
+    }
+    category = CATEGORY_db.find_all_merchant({'merchant_id': merchant['_id']}, projection)
+    return jsonify(message=category),201
     
 
 @app_category.route('/edit/<int:index>', methods=['PUT'], strict_slashes=False)
@@ -71,8 +76,13 @@ def edit_category(index: int):
         {'_id': _id},
         {'name': name, 'description': description}
     )
-    product_list = PRODUCT_db.update_all_merchant({'category_id': _id}, {'category': name})
-    return jsonify(message='Category updated successfully'),200
+    PRODUCT_db.update_all_merchant({'category_id': _id}, {'category': name})
+    projection = {
+        '_id': 0,
+        'merchant_id': 0
+    }
+    category = CATEGORY_db.find_all_merchant({'merchant_id': merchant['_id']}, projection)
+    return jsonify(message=category),200
 
 
 @app_category.route('/delete/<int:index>', methods=['DELETE'], strict_slashes=False)
@@ -103,7 +113,12 @@ def delete_category(index: int):
 
     PRODUCT_db.delete_all_merchant({'category_id': _id})
     CATEGORY_db.delete_merchant({'_id': _id})
-    return jsonify(message='Category with all its products deleted successfully'),200
+    projection = {
+        '_id': 0,
+        'merchant_id': 0
+    }
+    category = CATEGORY_db.find_all_merchant({'merchant_id': merchant['_id']}, projection)
+    return jsonify(message=category),200
 
 
 @app_category.route('/all', methods=['GET'], strict_slashes=False)

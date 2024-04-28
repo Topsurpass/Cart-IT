@@ -4,16 +4,18 @@ import Table from '@/components/features/Table';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import TableSkeletonLoader from '@/components/ui/TableSkeletonLoaded';
+import LoadButton from '@/components/ui/ButtonLoading';
 import { AddProductModal } from './add-product-modal';
 import { UpdateProductModal } from './update-product-modal';
 import { DeleteProductModal } from './delete-product-modal';
-import Spinner from '@/components/ui/Spinner';
 import { useNavigate } from 'react-router-dom';
 import apiBaseUrl from '@/api/baseUrl';
 import { Layout } from '../dashboard/layout';
+import { toast } from 'sonner';
 
 export const ProductPage = () => {
     const [catalogProducts, setCatalogProducts] = useState([]);
+     const [updateProducts, setUpdateProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [openAddModal, setOpenAddModal] = useState(false);
     const [openUpdateModal, setOpenUpdateModal] = useState(false);
@@ -23,7 +25,6 @@ export const ProductPage = () => {
     const [initialFormValues, setInitialFormValues] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isAuthorized, setIsAuthorized] = useState(true);
-    const [isPageReady, setIsPageReady] = useState(false);
 
     const navigate = useNavigate();
 
@@ -44,11 +45,16 @@ export const ProductPage = () => {
                 }
             } finally {
                 setLoading(false);
-                setIsPageReady(true);
             }
         };
         fetchData();
-    }, []);
+    }, [
+        openAddModal,
+        openUpdateModal,
+        openDeleteModal,
+        deletedItem,
+        updateItem,
+    ]);;
 
     if (!isAuthorized) {
         navigate('/');
@@ -90,7 +96,6 @@ export const ProductPage = () => {
      * @param {Object} formData
      */
     const handleSubmitAddProduct = async (formData) => {
-        setIsLoading(true);
         const userData = {
             name: formData.name,
             image_url: formData.image_url,
@@ -107,19 +112,17 @@ export const ProductPage = () => {
                     withCredentials: true,
                 }
             );
-            alert(response.data.message);
+            toast('New product added');
             setOpenAddModal(false);
-            window.location.reload();
+            setCatalogProducts(response.message);
         } catch (error) {
-            alert(error.response.data.message);
+            toast(error.response.data.message);
             if (
                 error.response &&
                 (error.response.status === 401 || error.response.status === 403)
             ) {
                 navigate('/');
             }
-        } finally {
-            setIsLoading(false);
         }
     };
 
@@ -146,11 +149,11 @@ export const ProductPage = () => {
                     withCredentials: true,
                 }
             );
-            alert(response.data.message);
+            toast('Product updated successfully');
             setOpenUpdateModal(false);
-            window.location.reload();
+            setCatalogProducts(response.message);
         } catch (error) {
-            alert(error.response.data.message);
+            toast(error.response.data.message);
             if (
                 error.response &&
                 (error.response.status === 401 || error.response.status === 403)
@@ -176,16 +179,16 @@ export const ProductPage = () => {
                     withCredentials: true,
                 }
             );
-            alert(response.data.message);
+            toast('Product deleted successfully');
             setOpenDeleteModal(false);
-            window.location.reload();
+            setCatalogProducts(response.message);
         } catch (error) {
-            alert(error.response.data.message);
+            toast(error.response.data.message);
             if (
                 error.response &&
                 (error.response.status === 401 || error.response.status === 403)
             ) {
-                alert(error.response.data.message);
+                toast(error.response.data.message);
                 navigate('/');
             }
         } finally {
@@ -226,25 +229,34 @@ export const ProductPage = () => {
             size: 100,
             Cell: ({ row }) => (
                 <div className="flex gap-3">
-                    <button
-                        onClick={() => selectUpdateProduct(row)}
-                        style={{ marginRight: '8px' }}
+                    <LoadButton
+                        type="submit"
+                        variant="primary"
+                        title={'Edit'}
+                        size="sm"
+                        fullWidth={false}
                         className="w-[100%] justify-center rounded-md border border-transparent
              bg-blue-500 px-4 py-1 text-lg font-bold text-white
               hover:bg-blue-200 hover:text-blue-900 focus:outline-none focus-visible:ring-2
                focus-visible:ring-blue-500 focus-visible:ring-offset-2 "
-                    >
-                        Edit
-                    </button>
-                    <button
-                        onClick={() => SelectDeleteProduct(row)}
+                        isLoading={false}
+                        // loadingText="Loggin out..."
+                        handleClick={() => selectUpdateProduct(row)}
+                    />
+                    <LoadButton
+                        type="submit"
+                        variant="primary"
+                        title={'Delete'}
+                        size="sm"
+                        fullWidth={false}
                         className="w-[100%] justify-center rounded-md border border-transparent
              bg-red-500 px-4 py-1 text-lg font-bold text-white hover:bg-red-300 hover:text-red-900 
               focus:outline-none focus-visible:ring-2
                focus-visible:ring-blue-500 focus-visible:ring-offset-2 "
-                    >
-                        Delete
-                    </button>
+                        isLoading={false}
+                        // loadingText="Loggin out..."
+                        handleClick={() => SelectDeleteProduct(row)}
+                    />
                 </div>
             ),
         },
@@ -276,7 +288,6 @@ export const ProductPage = () => {
                         setInitialFormValues(null);
                     }}
                     onSubmit={handleSubmitAddProduct}
-                    spinner={isLoading && <Spinner />}
                 />
             )}
             {openUpdateModal && (
@@ -287,7 +298,6 @@ export const ProductPage = () => {
                         setInitialFormValues(null);
                     }}
                     initialFormValues={initialFormValues}
-                    spinner={isLoading && <Spinner />}
                     onSubmit={handleSubmitUpdateProduct}
                 />
             )}
@@ -298,7 +308,6 @@ export const ProductPage = () => {
                         setOpenDeleteModal(false);
                         setDeletedItem(null);
                     }}
-                    spinner={isLoading && <Spinner />}
                     onConfirm={() => handleSubmitDeleteProduct(deletedItem)}
                 />
             )}

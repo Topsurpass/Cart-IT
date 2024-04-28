@@ -1,11 +1,11 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import MyModal from '@/components/ui/Modal';
 import { FormInput } from '@/components/features/FormInput';
-import { ButtonModal } from '@/components/ui/ButtonModal';
 import { HeaderModal } from '@/components/ui/HeaderModal';
-import { useNavigate } from 'react-router-dom';
+import LoadButton from '@/components/ui/ButtonLoading';
 import { SelectModal } from '@/components/ui/SelectModal';
 
 export const UpdateProductModal = ({
@@ -13,7 +13,6 @@ export const UpdateProductModal = ({
     closeModal,
     onSubmit,
     initialFormValues,
-    spinner
 }) => {
     const {
         register,
@@ -24,6 +23,7 @@ export const UpdateProductModal = ({
         formState: { errors },
     } = useForm({ defaultValues: initialFormValues });
 
+    const [isLoading, setIsLoading] = useState(false);
     /**
      * Use useEffect to update form values when initialFormValues change
      */
@@ -37,8 +37,17 @@ export const UpdateProductModal = ({
 
     const submitForm = async (data) => {
         if (onSubmit) {
-            await onSubmit(data);
-            reset();
+            try {
+                setIsLoading(true);
+                // Make  API call for adding new product N.B onAdd is an async fxn append await to it
+                await onSubmit(data);
+                reset();
+            } catch (error) {
+                // Handle API submission error
+                toast('Error adding category:', error);
+            } finally {
+                setIsLoading(false);
+            }
         }
     };
 
@@ -104,9 +113,20 @@ export const UpdateProductModal = ({
                 </div>
                 <SelectModal control={control} name="category" />
                 <div className="mt-4">
-                    <ButtonModal title="Update Product" />
+                    <LoadButton
+                        type="submit"
+                        variant="primary"
+                        title="Update product"
+                        size="sm"
+                        fullWidth={true}
+                        className=" `w-[100%] group relative flex items-center justify-center self-center rounded-md border border-transparent
+             bg-blue-500 px-4 py-2 text-lg font-bold text-white
+              hover:bg-blue-200 hover:text-blue-900 focus:outline-none focus-visible:ring-2
+               focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                        isLoading={isLoading}
+                        loadingText="Updating..."
+                    />
                 </div>
-                {spinner}
             </form>
         </MyModal>
     );
