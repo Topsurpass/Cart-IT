@@ -104,10 +104,10 @@ export const UpdateProductModal = ({
                         validation={register('quantity', {
                             required: true,
                             pattern: {
-                                value: /^[1-9]+$/,
+                                value: /^[0-9]+$/,
                             },
                         })}
-                        errMessaage="Quantity must be digits and cannot be 0"
+                        errMessaage="Quantity must be digits"
                         error={errors.quantity}
                     />
                 </div>

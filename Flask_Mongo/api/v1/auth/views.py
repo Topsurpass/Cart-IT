@@ -2,7 +2,7 @@
 """This module contains routes that requires authentication"""
 
 from api.v1.auth import app_auth
-from flask import request,  jsonify, abort, redirect
+from flask import request,  jsonify, abort
 from api import AUTH
 
 
@@ -71,8 +71,8 @@ def merchantProfile():
     session_id = request.cookies.get("session_id")
     merchant = AUTH.get_user_from_session_id(session_id)
     if merchant:
-        response = jsonify({'email': merchant['email']})
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        response = jsonify({'email': merchant['email'], 'user': merchant['merchant']})
         return response
-    abort(403)
+    else:
+        abort(403)
     
